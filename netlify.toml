@@ -1,0 +1,41 @@
+[build]
+  # This project is a static site: Netlify publishes these files as-is.
+  publish = "."
+
+# Serve the standalone pages at clean URLs while preserving their existing
+# relative links and assets.
+[[redirects]]
+  from = "/"
+  to = "/STACHE%20Home%20%28standalone%29.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/home"
+  to = "/STACHE%20Home%20%28standalone%29.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/about"
+  to = "/STACHE%20About%20%28standalone%29.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/work"
+  to = "/STACHE%20Work%20%28standalone%29.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/services"
+  to = "/STACHE%20Services%20%28standalone%29.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/contact"
+  to = "/STACHE%20Contact%20%28standalone%29.html"
+  status = 200
+  force = true
