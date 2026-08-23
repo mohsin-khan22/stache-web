@@ -342,6 +342,30 @@ look right:
 No Open Graph or Twitter tags: those are a genuine SEO change and stay in Phase 8.
 No `apple-touch-icon` either — Apple needs a PNG and the old site had none.
 
+**D13 — The pixel diff was not enough on its own.** *(Phase 6)*
+`compare-dom.mjs` walks every element on both sites and compares tag, box, copy,
+accessibility attributes, decoded image dimensions and 47 style properties —
+including the animation and transition declarations a screenshot can never show.
+It immediately found something 35 identical screenshots had not: the marquee was
+wrapping each word/star pair in a `display:contents` span to carry a React key,
+adding 14 elements to Home. Invisible, but wrong. Fragments fixed it.
+
+Each page is sampled twice, because the two questions need opposite setups:
+motion declarations must be read while the page is live (freezing first would
+flatten every duration to `0s` and make the check vacuous), and layout must be
+read after animations are snapped to their end frame (sampled live, two runs
+differ by whatever fraction of a second separates them).
+
+**D14 — One "failure" was the harness, and it proved itself by swapping sides.** *(Phase 6)*
+iPhone 15 portrait reported a 1.29% diff on Home. The cause was the settle step:
+after scrolling the page to fire every reveal it waited a fixed 250 ms before
+returning to the top, and on mobile WebKit the final scroll event sometimes
+landed later than that — leaving the app believing it was still scrolled, hero
+copy stuck at full parallax offset. Re-running three times showed legacy stuck,
+then next stuck, then neither: a race in the measurement, not a defect. The
+settle now polls the scroll progress bar, which is driven by the same state.
+Two consecutive device runs afterwards: all 20 profile/page pairs at 0 pixels.
+
 ## 7. Progress
 
 | Phase | Status |
@@ -352,5 +376,5 @@ No `apple-touch-icon` either — Apple needs a PNG and the old site had none.
 | 3 Style fidelity | done — pseudo classes and responsive classes generated (see D6) |
 | 4 Page ports | done — **all 35 baseline shots reproduce at 0 pixels** |
 | 5 Head, metadata, 404, favicon | done — routing config deferred to 7 (see D11) |
-| 6 Verification | next |
-| 7 Cutover | not started |
+| 6 Verification | done — 11/11 checks; 0 px in Chrome, Firefox, WebKit and on 4 device profiles |
+| 7 Cutover | in progress |

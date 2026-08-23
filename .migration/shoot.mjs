@@ -2,6 +2,8 @@
 //
 //   node .migration/shoot.mjs --base http://localhost:4173 --out baseline
 //   node .migration/shoot.mjs --base http://localhost:3000 --out candidate --only work
+//   node .migration/shoot.mjs --base ... --out ff-legacy --browser firefox
+//   node .migration/shoot.mjs --base ... --out baseline-rm --reduced
 //
 // Determinism is the whole point: the same freezing rules are applied to the
 // legacy bundle and to the Next build, so a non-zero diff always means a real
@@ -10,9 +12,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
 import { PNG } from 'pngjs';
 import { VIEWPORTS, ROUTES, buildMatrix } from './shots.mjs';
+import { ENGINES, FREEZE_TIMERS, FREEZE_CSS, waitForApp, settleScroll } from './harness.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,62 +25,16 @@ const arg = (flag, fallback) => {
 const BASE = arg('--base', 'http://localhost:4173').replace(/\/$/, '');
 const OUT = path.join(HERE, 'shots', arg('--out', 'baseline'));
 const ONLY = arg('--only', null);
+// --reduced emulates prefers-reduced-motion: reduce. The stylesheet collapses
+// every animation and transition to 0.01ms and the hero autoplay never starts,
+// so that is a different render path and needs its own pair of runs.
+const REDUCED = process.argv.includes('--reduced');
+// Engines render type and effects differently, so a cross-browser run compares
+// legacy against next *within* one engine — never one engine against another.
+const ENGINE = arg('--browser', 'chrome');
 
-// Runs before any page script. Long intervals are the hero slideshow's 6.5 s
-// autoplay — left alive, the slide showing at capture time is a coin toss.
-const FREEZE_TIMERS = () => {
-  const real = window.setInterval.bind(window);
-  window.setInterval = (fn, ms, ...rest) => (ms >= 1000 ? 0 : real(fn, ms, ...rest));
-};
-
-// Injected after load: snaps every animation to its end frame and removes
-// transitions, so no capture depends on when the shutter opened.
-const FREEZE_CSS = `*,*::before,*::after{
-  animation-delay:0s !important;
-  animation-duration:0s !important;
-  animation-iteration-count:1 !important;
-  animation-fill-mode:both !important;
-  transition:none !important;
-  caret-color:transparent !important;
-}`;
-
-// The preloader panel is the fixed z-index:9998 layer; it fades to opacity 0
-// once the logo FLIP has handed off to the header.
-const preloaderDone = () => {
-  const el = [...document.querySelectorAll('div')].find((d) => {
-    const s = getComputedStyle(d);
-    return s.position === 'fixed' && s.zIndex === '9998';
-  });
-  return !el || Number(getComputedStyle(el).opacity) === 0;
-};
-
-async function settle(page) {
-  await page.waitForLoadState('load');
-  // Wait for the app to mount before asking whether the preloader is finished:
-  // on a document that has not rendered yet there is no preloader layer to find,
-  // and preloaderDone() would report "done" against the bare unpacking screen.
-  await page.waitForSelector('header', { state: 'attached', timeout: 20000 });
-  // Preloader gates on asset loads with a 2.8 s hard cap, then a 260 ms handoff.
-  await page.waitForFunction(preloaderDone, null, { timeout: 15000 });
-  await page.evaluate(() => document.fonts.ready);
-  await page.addStyleTag({ content: FREEZE_CSS });
-
-  // Walk the page so every IntersectionObserver reveal fires, then return to
-  // the top: scroll-derived state (header, progress bar, hero parallax) is
-  // back at its initial values, but the reveals stay settled.
-  await page.evaluate(async () => {
-    const step = Math.round(window.innerHeight * 0.8);
-    for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
-      window.scrollTo(0, y);
-      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    }
-    window.scrollTo(0, 0);
-    await new Promise((r) => setTimeout(r, 250));
-  });
-  await page.waitForTimeout(150);
-}
-
-const browser = await chromium.launch({ channel: 'chrome' });
+if (!ENGINES[ENGINE]) throw new Error(`unknown --browser ${ENGINE}; use chrome, firefox or webkit`);
+const browser = await ENGINES[ENGINE]();
 const shots = buildMatrix().filter((s) => !ONLY || s.name.includes(ONLY));
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -87,14 +43,18 @@ for (const shot of shots) {
   const context = await browser.newContext({
     viewport: VIEWPORTS[shot.viewport],
     deviceScaleFactor: 1,
-    reducedMotion: 'no-preference',
+    reducedMotion: REDUCED ? 'reduce' : 'no-preference',
     colorScheme: 'dark',
   });
   await context.addInitScript(FREEZE_TIMERS);
   const page = await context.newPage();
   try {
     await page.goto(BASE + ROUTES[shot.route], { waitUntil: 'domcontentloaded' });
-    await settle(page);
+    await page.waitForLoadState('load');
+    await waitForApp(page);
+    await page.addStyleTag({ content: FREEZE_CSS });
+    // Reveals fire on the way down; scroll-derived state is back at zero after.
+    await settleScroll(page);
     if (shot.act) {
       await shot.act(page);
       await page.waitForTimeout(200);

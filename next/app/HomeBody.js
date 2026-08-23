@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { useChrome } from './_chrome/chrome-context';
 import { sx } from './pseudo';
 import { HERO_DURATION, HERO_SLIDES } from './hero-slides';
@@ -569,12 +569,14 @@ export default function HomeBody() {
           style={{ display: 'flex', alignItems: 'center', width: 'max-content', animation: 'marquee 30s linear infinite' }}
           className={sx({ hover: 'animation-play-state:paused' })}
         >
-          {/* the list runs twice so the -50% keyframe loops seamlessly */}
+          {/* The list runs twice so the -50% keyframe loops seamlessly. Fragment
+              rather than a wrapper element: the marquee is a flat run of
+              span/i siblings, and anything in between would change the tree. */}
           {[...MARQUEE_WORDS, ...MARQUEE_WORDS].map((word, i) => (
-            <span key={i} style={{ display: 'contents' }}>
+            <Fragment key={i}>
               <span style={MARQUEE_WORD}>{word}</span>
               <i style={MARQUEE_STAR}>✦</i>
-            </span>
+            </Fragment>
           ))}
         </div>
       </div>

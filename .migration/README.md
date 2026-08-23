@@ -30,10 +30,26 @@ Checks — each compares the ported site against the bundled one:
 
 | Command | What it proves |
 | --- | --- |
-| `node compare-chrome.mjs` | 300 probes: geometry, 30 computed styles and copy for every chrome element, 5 routes × 3 viewports |
+| **`node verify-all.mjs`** | **Runs everything below plus all four pixel matrices, with a pass/fail summary.** `--quick` skips cross-browser and devices |
+| `node compare-dom.mjs` | Every element in document order: tag, box, copy, a11y attributes, decoded image size, 13 motion and 34 layout properties |
+| `node compare-chrome.mjs` | 300 probes over the chrome, absolute geometry — so it also asserts both documents are the same height |
 | `node compare-preloader.mjs` | The FLIP transform strings — i.e. the measured scale/offset arithmetic — match state for state |
+| `node verify-cadence.mjs` | The hero autoplay, the one timer everything else freezes: same count, same order, gaps within 400ms of 6500ms |
+| `node verify-devices.mjs` | iPhone 15 portrait and landscape, iPad Pro 11, Pixel 7 — real touch/DPR/UA profiles, not bare viewports |
 | `node audit-responsive.mjs` | Enumerates the elements the `[style*=…]` rules hit, so each gets its class in the port |
 | `node check-console.mjs [url]` | No console errors, page errors, hydration warnings or failed requests on any route |
+
+`harness.mjs` holds the shared page-wrangling: engine launchers, the timer and
+animation freezes, `waitForApp`, and `settleScroll`.
+
+`settleScroll` earned its own function. Scrolling the page to fire every reveal
+and then returning to the top used to end in a fixed 250ms wait, and on mobile
+WebKit the final scroll event sometimes landed after it — leaving the app
+believing it was still scrolled, with the hero copy stuck at full parallax
+offset. It surfaced as a 1.29% diff on iPhone Home that **swapped sides between
+runs**: legacy stuck once, next stuck the next, neither on the third. It now
+polls the scroll progress bar, which is driven by the same state, instead of
+guessing at a duration.
 
 Typical loop once the Next app exists:
 

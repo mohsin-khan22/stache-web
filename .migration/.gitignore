@@ -5,10 +5,10 @@ node_modules/
 .body/
 .probe-*.mjs
 
-# Captured PNGs are large and regenerable; only the baseline's fingerprint.json
-# is committed, as the record that a regenerated baseline matches the one signed
-# off on. Candidate and diff runs are throwaway.
-shots/**/*.png
-shots/candidate/
-shots/diff-*/
-shots/selfcheck*/
+# Captured PNGs are large and regenerable, and a verification run leaves a dozen
+# shot directories behind. Only the baseline's fingerprint is kept: the record
+# that a regenerated baseline matches the one signed off on.
+shots/*
+!shots/baseline/
+shots/baseline/*
+!shots/baseline/fingerprint.json
