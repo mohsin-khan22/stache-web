@@ -1,6 +1,6 @@
 import SiteShell from '../_chrome/SiteShell';
 import PageStyles from '../page-styles';
-import ScaffoldNote from '../scaffold-note';
+import ContactBody from './ContactBody';
 
 export const metadata = {
   title: 'Contact',
@@ -12,7 +12,7 @@ export default function ContactPage() {
     <>
       <PageStyles page="contact" />
       <SiteShell page="contact">
-        <ScaffoldNote page="contact" rules={4} />
+        <ContactBody />
       </SiteShell>
     </>
   );

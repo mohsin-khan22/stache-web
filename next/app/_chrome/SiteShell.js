@@ -214,7 +214,6 @@ export default class SiteShell extends Component {
     };
     window.addEventListener('scroll', this._onScroll);
     this._reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    if (this.props.onMount) this.props.onMount({ reduceMotion: this._reduceMotion });
     this._markTimer = setTimeout(() => this.setState({ markFlip: this.measureMarkFlip(), markOut: true }), 380);
     this._startReveal();
     this._io = new IntersectionObserver((entries) => {

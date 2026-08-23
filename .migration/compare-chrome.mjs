@@ -4,11 +4,10 @@
 //
 //   node .migration/compare-chrome.mjs [legacyUrl] [nextUrl]
 //
-// Two things are deliberately not compared as absolute values:
-//   - anything below <main> is measured relative to the footer, because until
-//     the page bodies are ported the placeholder makes the document shorter and
-//     shifts everything down;
-//   - <main> itself is only checked for x/width — its height is the page body.
+// Since Phase 4 every probe is absolute, <main> and <footer> included, so this
+// also asserts the two documents are the same height. Elements inside the footer
+// stay measured relative to it — that was needed while the page bodies were
+// placeholders, and it localises a failure to the footer when one happens.
 import { chromium } from 'playwright';
 
 const LEGACY = process.argv[2] || 'http://localhost:4173';
@@ -35,8 +34,8 @@ const PROBES = {
   mobileNav: ['[data-mobile-nav]', 'abs'],
   mobileNavFirst: ['[data-mobile-nav] a:nth-child(1)', 'abs'],
   progress: ['#dc-root > .sc-host > div[aria-hidden="true"]', 'abs'],
-  main: ['main', 'span'],
-  footer: ['footer', 'span'],
+  main: ['main', 'abs'],
+  footer: ['footer', 'abs'],
   footerGrid: ['footer > div > div:nth-child(1)', 'rel'],
   footerLogo: ['footer img', 'rel'],
   footerBlurb: ['footer p', 'rel'],
@@ -131,13 +130,10 @@ for (const route of ROUTES) {
       if (JSON.stringify(x.box) !== JSON.stringify(y.box)) {
         problems.push(`${name} box  legacy ${JSON.stringify(x.box)}  next ${JSON.stringify(y.box)}`);
       }
-      // <main> holds the page body, still a placeholder before Phase 4.
-      if (name !== 'main' && x.text !== y.text) {
+      if (x.text !== y.text) {
         problems.push(`${name} text\n         legacy «${x.text.slice(0, 120)}»\n         next   «${y.text.slice(0, 120)}»`);
       }
       for (const k of STYLE_KEYS) {
-        // <main>'s height is the page body's, not the chrome's.
-        if (name === 'main' && k === 'height') continue;
         if (x.style[k] !== y.style[k]) problems.push(`${name}.${k}  «${x.style[k]}» vs «${y.style[k]}»`);
       }
     }

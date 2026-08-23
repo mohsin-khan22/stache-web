@@ -306,6 +306,22 @@ panel in the layout (translated off-screen) where the other four remove it.
 Found by the chrome comparison, not by reading — it was the only mismatch in 300
 probes.
 
+**D9 — The contact form's required fields are a pre-existing bug, reproduced.** *(Phase 4)*
+The template wrote `required=""`, which React treats as a falsy boolean prop and
+drops, so no `required` attribute ever reaches the live DOM — verified directly
+against the running site: `#name.required` is false and `form.checkValidity()`
+returns true on an empty form. An empty submission therefore succeeds and shows
+the thank-you, and the "Please complete the required fields" branch is
+unreachable. Adding `required` in the port would change behaviour, so it stays
+out and the bug is flagged instead. One word to fix whenever the client wants
+it — a good Phase 8 candidate.
+
+**D10 — Two authoring artifacts kept.** *(Phase 4)*
+Contact's section carries `data-comment-anchor="6dfec2a67d-section"` from the
+design tool, and three cards repeat `transition` twice in one style attribute
+(the later value wins). Both are inert, both are reproduced — the DOM comparison
+would otherwise flag them, and neither is worth a behaviour risk to tidy.
+
 ## 7. Progress
 
 | Phase | Status |
@@ -314,5 +330,6 @@ probes.
 | 1 Scaffold | done — builds and exports; fonts metrically identical |
 | 2 Shared chrome | done — 300 chrome probes and the preloader FLIP identical |
 | 3 Style fidelity | done — pseudo classes and responsive classes generated (see D6) |
-| 4 Page ports | next |
-| 5–7 | not started |
+| 4 Page ports | done — **all 35 baseline shots reproduce at 0 pixels** |
+| 5 Head/routing | next |
+| 6–7 | not started |

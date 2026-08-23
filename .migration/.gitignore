@@ -1,6 +1,14 @@
 node_modules/
 *.log
 
-# Captured PNGs are large and regenerable; the committed fingerprint.json is the
-# record that a regenerated baseline matches the one signed off on.
+# Scratch: bodies re-extracted by build scripts, one-off probes.
+.body/
+.probe-*.mjs
+
+# Captured PNGs are large and regenerable; only the baseline's fingerprint.json
+# is committed, as the record that a regenerated baseline matches the one signed
+# off on. Candidate and diff runs are throwaway.
 shots/**/*.png
+shots/candidate/
+shots/diff-*/
+shots/selfcheck*/
