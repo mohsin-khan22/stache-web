@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(HERE, 'src', 'pages');
-const APP = path.join(HERE, '..', 'next', 'app');
+const APP = path.join(HERE, '..', 'app');
 const PAGES = ['home', 'work', 'services', 'about', 'contact'];
 
 // Ported from dc-runtime's importantify(): split on top-level semicolons only,

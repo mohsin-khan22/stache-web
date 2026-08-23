@@ -72,6 +72,12 @@ export async function settleScroll(page, timeout = 10000) {
     });
     return !bar || bar.getBoundingClientRect().width === 0;
   }, null, { timeout });
+  // Home's project cards are loading="lazy": scrolling past them starts the
+  // fetch, but the poll above can return before they have decoded, and a
+  // half-loaded card is an 11% diff. Wait for every image to finish.
+  await page.waitForFunction(() => [...document.images].every((i) => i.complete && i.naturalWidth > 0), null, {
+    timeout,
+  });
   // One more frame so the re-render that zeroing the state triggers is painted.
   await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
 }

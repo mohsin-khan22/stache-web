@@ -13,7 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const APP = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-const REPO = path.join(APP, '..');
+const REPO = APP;
 const PUBLIC = path.join(APP, 'public');
 
 const COPIES = [

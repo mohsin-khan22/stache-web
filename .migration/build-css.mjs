@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(HERE, 'src');
-const APP = path.join(HERE, '..', 'next', 'app');
+const APP = path.join(HERE, '..', 'app');
 const PAGES = ['home', 'work', 'services', 'about', 'contact'];
 
 // The dc-runtime injected this on every page; without it the ported markup

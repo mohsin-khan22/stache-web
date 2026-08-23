@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const APP = path.join(HERE, '..', 'next', 'app');
+const APP = path.join(HERE, '..', 'app');
 
 // Read rather than import: mark-path.js is ESM inside a package with no
 // "type": "module", so Node would parse it as CommonJS.

@@ -13,7 +13,7 @@ for (const p of ['home', 'work', 'services', 'contact']) {
   if (!read(p).includes(m[1])) throw new Error(`mark path differs on ${p}`);
 }
 
-const outDir = path.join(HERE, '..', 'next', 'app', '_chrome');
+const outDir = path.join(HERE, '..', 'app', '_chrome');
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(
   path.join(outDir, 'mark-path.js'),

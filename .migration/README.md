@@ -14,11 +14,11 @@ npx playwright install chromium   # optional — the scripts use system Chrome
 | --- | --- |
 | `npm run extract` | Decompiles the five standalone bundles into `src/` |
 | `npm run serve:legacy` | Serves the pre-migration site on `:4173` at the clean URLs netlify.toml rewrites |
-| `node serve-static.mjs ../next/out 4174` | Serves the exported Next build the way Netlify would |
+| `node serve-static.mjs ../out 4174` | Serves the exported Next build the way Netlify would |
 | `node shoot.mjs --base <url> --out <name>` | Captures the 35-shot matrix |
 | `node compare.mjs <a> <b> [--threshold 0.1]` | Pixel-diffs two shot sets, writes diffs for anything over threshold |
 
-Generators — each writes into `../next/app`, none are hand-edited afterwards:
+Generators — each writes into `../app`, none are hand-edited afterwards:
 
 | Command | Output |
 | --- | --- |
@@ -55,7 +55,7 @@ Typical loop once the Next app exists:
 
 ```bash
 node serve-legacy.mjs &                                  # old site  :4173
-cd ../next && npm run dev &                              # new site  :3000
+cd .. && npm run dev &                              # new site  :3000
 node shoot.mjs --base http://localhost:3000 --out candidate
 node compare.mjs baseline candidate
 ```

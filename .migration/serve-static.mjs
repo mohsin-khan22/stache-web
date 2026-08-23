@@ -1,14 +1,14 @@
 // Serves a directory the way Netlify serves a static publish: /work resolves to
 // work.html, /  resolves to index.html. Used to shoot the exported Next build.
 //
-//   node .migration/serve-static.mjs ../next/out 4174
+//   node .migration/serve-static.mjs ../out 4174
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.resolve(HERE, process.argv[2] || '../next/out');
+const ROOT = path.resolve(HERE, process.argv[2] || '../out');
 const PORT = Number(process.argv[3] || 4174);
 
 const TYPES = {

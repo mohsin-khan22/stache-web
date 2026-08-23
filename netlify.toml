@@ -1,41 +1,66 @@
 [build]
-  # This project is a static site: Netlify publishes these files as-is.
-  publish = "."
+  # The Next app exports static HTML into out/. `npm run build` runs the
+  # prebuild asset sync first, so public/ is populated from assets/images and
+  # from the files extracted out of the old bundles.
+  command = "npm run build"
+  publish = "out"
 
-# Serve the standalone pages at clean URLs while preserving their existing
-# relative links and assets.
+[build.environment]
+  # Next 16 requires Node 20.9+.
+  NODE_VERSION = "20"
+
+# ── Legacy URLs ──────────────────────────────────────────────────────────────
+# The bundled site published five .html files, and this config used to rewrite
+# clean paths onto them. Those files are no longer published, so anything that
+# already links to or has bookmarked one is redirected — permanently, because
+# the clean URL is the canonical one now.
 [[redirects]]
-  from = "/"
-  to = "/STACHE%20Home%20%28standalone%29.html"
-  status = 200
+  from = "/STACHE Home (standalone).html"
+  to = "/"
+  status = 301
   force = true
 
+[[redirects]]
+  from = "/STACHE Work (standalone).html"
+  to = "/work"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/STACHE Services (standalone).html"
+  to = "/services"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/STACHE About (standalone).html"
+  to = "/about"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/STACHE Contact (standalone).html"
+  to = "/contact"
+  status = 301
+  force = true
+
+# /home was a clean alias for the old home page and has no route of its own now.
 [[redirects]]
   from = "/home"
-  to = "/STACHE%20Home%20%28standalone%29.html"
-  status = 200
+  to = "/"
+  status = 301
   force = true
 
-[[redirects]]
-  from = "/about"
-  to = "/STACHE%20About%20%28standalone%29.html"
-  status = 200
-  force = true
+# ── Caching ──────────────────────────────────────────────────────────────────
+# Next fingerprints everything under /_next/static, so those are immutable.
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
-[[redirects]]
-  from = "/work"
-  to = "/STACHE%20Work%20%28standalone%29.html"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/services"
-  to = "/STACHE%20Services%20%28standalone%29.html"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/contact"
-  to = "/STACHE%20Contact%20%28standalone%29.html"
-  status = 200
-  force = true
+# The fonts are named rather than hashed, but they only change if the typeface
+# does — and then the filename changes with it.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
