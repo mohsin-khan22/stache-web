@@ -1,0 +1,156 @@
+{
+  "home": {
+    "templateChars": 70358,
+    "logicLines": 335,
+    "globalCssHash": "572e7804cd92",
+    "fontCssHash": "0acce0328536",
+    "assets": {
+      "abd62490-1af1-425c-baea-4ceac10ccd74": "/logo.svg",
+      "0c01c826-d282-437c-8836-7348f3e95d03": "/fonts/oswald-variable-cyrillic-ext.woff2",
+      "ebb4351c-20b8-4e46-a1d6-eda1d8cf33c1": "/fonts/oswald-variable-cyrillic.woff2",
+      "f8b1615d-457d-4863-b454-e33b25c80b42": "/fonts/oswald-variable-vietnamese.woff2",
+      "edc7eca1-b325-4b66-becc-7b224ca774c4": "/fonts/oswald-variable-latin-ext.woff2",
+      "0f432cc9-2989-448d-aba5-57ca29281d6c": "/fonts/oswald-variable-latin.woff2",
+      "f0e1d2c3-4b5a-6978-8765-a1b2c3d4e5f6": "/fonts/inter-variable-latin.woff2"
+    },
+    "staleEmbedded": 5,
+    "runtimeScripts": [
+      {
+        "uuid": "3bd6f031-c54e-4414-8457-eaf7d61582c6",
+        "bytes": 69150
+      },
+      {
+        "uuid": "23e0466c-29ee-492d-a572-17f8d1f7463f",
+        "bytes": 10751
+      },
+      {
+        "uuid": "9e4122fd-8f96-437f-ac03-4795e015a874",
+        "bytes": 131835
+      }
+    ]
+  },
+  "work": {
+    "templateChars": 37307,
+    "logicLines": 321,
+    "globalCssHash": "62cefc5f3d4f",
+    "fontCssHash": "704d78e6937f",
+    "assets": {
+      "86153ce0-f6f1-420c-b8df-7e50dad7f17b": "/logo.svg",
+      "5b20e3fc-8ffa-4b98-8cb7-d426bbe60bea": "/fonts/oswald-variable-cyrillic-ext.woff2",
+      "e9f8121c-f73b-492d-b5d4-781559360b35": "/fonts/oswald-variable-cyrillic.woff2",
+      "1aeb0179-a6f5-4af4-9f21-bb00aa5eb1c0": "/fonts/oswald-variable-vietnamese.woff2",
+      "ff457192-f4ce-4218-8040-aef410a0a3de": "/fonts/oswald-variable-latin-ext.woff2",
+      "e18f3581-f8cd-4dfd-beef-a254adc09127": "/fonts/oswald-variable-latin.woff2",
+      "f0e1d2c3-4b5a-6978-8765-a1b2c3d4e5f6": "/fonts/inter-variable-latin.woff2"
+    },
+    "staleEmbedded": 10,
+    "runtimeScripts": [
+      {
+        "uuid": "52067bfb-3900-46d6-89a4-5a0ba9a74d92",
+        "bytes": 69150
+      },
+      {
+        "uuid": "c179dc72-511c-48c3-aa05-3cc8967326b2",
+        "bytes": 10751
+      },
+      {
+        "uuid": "48e3955d-e7e5-45e9-8057-805db1cec87c",
+        "bytes": 131835
+      }
+    ]
+  },
+  "services": {
+    "templateChars": 45139,
+    "logicLines": 262,
+    "globalCssHash": "c09e2ffaec84",
+    "fontCssHash": "4c13df23da2e",
+    "assets": {
+      "9c13375c-a3b9-46d0-87e3-29cb5e016185": "/logo.svg",
+      "a3923ec4-bfe9-4a6f-9546-2c40d529b280": "/assets/images/services-nsti-immersive.jpg",
+      "c94e4381-04f6-40df-8aa1-8fda33eb95e4": "/assets/images/services-digital-marketing.jpg",
+      "ef68b1b6-ee23-4dc8-b246-d715580276c0": "/assets/images/services-brand-strategy.jpg",
+      "2e812b39-e562-410f-ad6b-d36301306016": "/fonts/oswald-variable-cyrillic-ext.woff2",
+      "966ff1b4-b41f-45a7-b230-4b2b79ee4c29": "/fonts/oswald-variable-cyrillic.woff2",
+      "0808878d-14b9-44d4-82a5-6c17a0125d4e": "/fonts/oswald-variable-vietnamese.woff2",
+      "07991559-722a-4a7f-9d0c-cb8e36b7e2fd": "/fonts/oswald-variable-latin-ext.woff2",
+      "38bb9b5b-70e8-4446-a98c-2934d9f3d8ab": "/fonts/oswald-variable-latin.woff2",
+      "f0e1d2c3-4b5a-6978-8765-a1b2c3d4e5f6": "/fonts/inter-variable-latin.woff2"
+    },
+    "staleEmbedded": 0,
+    "runtimeScripts": [
+      {
+        "uuid": "c9ae2b81-2f48-4c30-ab16-e75b070603f0",
+        "bytes": 69150
+      },
+      {
+        "uuid": "f5400172-5764-4164-8aab-8b61ac7f4691",
+        "bytes": 10751
+      },
+      {
+        "uuid": "b4c1503a-2f67-4569-ba8f-8ca2c49bb9e7",
+        "bytes": 131835
+      }
+    ]
+  },
+  "about": {
+    "templateChars": 44632,
+    "logicLines": 262,
+    "globalCssHash": "c09e2ffaec84",
+    "fontCssHash": "8231790fcc3a",
+    "assets": {
+      "82bbc10a-3020-4ac9-962b-62dc855b4915": "/logo.svg",
+      "5162c462-4025-4422-ae18-3aac6da52e9c": "/assets/images/about-founder-ahmed-rezk.jpg",
+      "638c2317-9902-469c-87ca-00117a6a4e36": "/fonts/oswald-variable-cyrillic-ext.woff2",
+      "43d26526-31be-41bf-800c-c01b8fc2245e": "/fonts/oswald-variable-cyrillic.woff2",
+      "f5fbea66-ce23-4291-8d7c-0936d19e87bf": "/fonts/oswald-variable-vietnamese.woff2",
+      "57e4da26-ad6a-4cbd-b6b7-e504c36ccab9": "/fonts/oswald-variable-latin-ext.woff2",
+      "1beb504c-17ee-4aad-8b5e-2e9c2b84016f": "/fonts/oswald-variable-latin.woff2",
+      "f0e1d2c3-4b5a-6978-8765-a1b2c3d4e5f6": "/fonts/inter-variable-latin.woff2"
+    },
+    "staleEmbedded": 0,
+    "runtimeScripts": [
+      {
+        "uuid": "2b91d1ce-0f8c-4524-9cb2-5cdf645fa107",
+        "bytes": 69150
+      },
+      {
+        "uuid": "a49098e1-379b-41b2-941a-48ebdf65a42d",
+        "bytes": 10751
+      },
+      {
+        "uuid": "f3b84f68-cd90-4365-a4e4-067a831636dd",
+        "bytes": 131835
+      }
+    ]
+  },
+  "contact": {
+    "templateChars": 37331,
+    "logicLines": 264,
+    "globalCssHash": "d2f1a9ce6ed5",
+    "fontCssHash": "c0b490b15884",
+    "assets": {
+      "c22b6e77-cafe-4c74-b8aa-95b28d769158": "/logo.svg",
+      "1347c5d0-70f3-4354-9411-426ca1d7d117": "/fonts/oswald-variable-cyrillic-ext.woff2",
+      "dd8dba6d-367c-4719-b4a8-0d640eb0ee69": "/fonts/oswald-variable-cyrillic.woff2",
+      "5acb70db-acf9-4803-acf6-cd8909226fe1": "/fonts/oswald-variable-vietnamese.woff2",
+      "c6641c12-f375-43a1-83da-bc5ee1e96fe8": "/fonts/oswald-variable-latin-ext.woff2",
+      "32b2fe4b-07d7-4413-8496-098fcd9e50fa": "/fonts/oswald-variable-latin.woff2",
+      "f0e1d2c3-4b5a-6978-8765-a1b2c3d4e5f6": "/fonts/inter-variable-latin.woff2"
+    },
+    "staleEmbedded": 0,
+    "runtimeScripts": [
+      {
+        "uuid": "7a776821-b002-42cf-820d-03874a2e8c72",
+        "bytes": 69150
+      },
+      {
+        "uuid": "4a343ac6-850d-43f1-b1d5-6399baa18342",
+        "bytes": 10751
+      },
+      {
+        "uuid": "90d065ff-d228-4feb-b911-633c97ce8537",
+        "bytes": 131835
+      }
+    ]
+  }
+}
