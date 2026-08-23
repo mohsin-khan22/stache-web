@@ -14,8 +14,26 @@ npx playwright install chromium   # optional — the scripts use system Chrome
 | --- | --- |
 | `npm run extract` | Decompiles the five standalone bundles into `src/` |
 | `npm run serve:legacy` | Serves the pre-migration site on `:4173` at the clean URLs netlify.toml rewrites |
+| `node serve-static.mjs ../next/out 4174` | Serves the exported Next build the way Netlify would |
 | `node shoot.mjs --base <url> --out <name>` | Captures the 35-shot matrix |
 | `node compare.mjs <a> <b> [--threshold 0.1]` | Pixel-diffs two shot sets, writes diffs for anything over threshold |
+
+Generators — each writes into `../next/app`, none are hand-edited afterwards:
+
+| Command | Output |
+| --- | --- |
+| `node build-css.mjs` | `globals.css` (fonts + 20 shared rules, `[style*=…]` rewritten to classes) and `page-css.js` (per-page tails) |
+| `node build-pseudo.mjs` | `pseudo.css` + `pseudo.js` — the 15 classes behind 109 `style-<pseudo>` attributes |
+| `node build-mark-path.mjs` | `_chrome/mark-path.js` — the preloader's moustache outline |
+
+Checks — each compares the ported site against the bundled one:
+
+| Command | What it proves |
+| --- | --- |
+| `node compare-chrome.mjs` | 300 probes: geometry, 30 computed styles and copy for every chrome element, 5 routes × 3 viewports |
+| `node compare-preloader.mjs` | The FLIP transform strings — i.e. the measured scale/offset arithmetic — match state for state |
+| `node audit-responsive.mjs` | Enumerates the elements the `[style*=…]` rules hit, so each gets its class in the port |
+| `node check-console.mjs [url]` | No console errors, page errors, hydration warnings or failed requests on any route |
 
 Typical loop once the Next app exists:
 
@@ -66,7 +84,11 @@ Two independent runs of all 35 shots differ by **0 pixels**. That holds because
   reveal, then back to 0 — reveals stay settled while scroll-derived state
   (header, progress bar, hero parallax) returns to its initial values
 
-Any non-zero diff against `baseline` is therefore a real change.
+Any non-zero diff against `baseline` is therefore a real change — with one known
+exception. The card arrow badges use `backdrop-filter: blur(10px)`, and GPU blur
+is not bit-exact between runs: `work-tablet` can shift by ~74 px (0.0018%) on
+those badges alone. Anything under ~0.01% concentrated on blurred elements is
+noise; the default 0.1% threshold absorbs it.
 
 ## Baseline storage
 

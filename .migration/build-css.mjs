@@ -13,8 +13,9 @@ const APP = path.join(HERE, '..', 'next', 'app');
 const PAGES = ['home', 'work', 'services', 'about', 'contact'];
 
 // The dc-runtime injected this on every page; without it the ported markup
-// sits in a differently-sized root box.
-const FULL_PAGE_CSS = 'html,body{height:100%;margin:0}\n#dc-root{height:100%}';
+// sits in a differently-sized root box. The runtime wrapped the page in
+// <div id="dc-root"><div class="sc-host">…</div></div>, so the port keeps both.
+const FULL_PAGE_CSS = 'html,body{height:100%;margin:0}\n#dc-root,#dc-root>.sc-host{height:100%}';
 
 // Split a stylesheet into top-level tokens: comments and complete rules
 // (including @media blocks with their nested contents).
@@ -75,6 +76,55 @@ for (const p of PAGES) {
 }
 if (bad) process.exit(1);
 
+// ── [style*="…"] → class ─────────────────────────────────────────────────────
+// The mobile layout hangs off selectors that match the browser's *normalised*
+// serialisation of an inline style — `grid-template-columns: 1.5fr 1fr 1fr`,
+// with the space after the colon. That form only exists because the runtime set
+// styles on the client. Server-rendered React writes the attribute without the
+// space and hydration never rewrites it (verified: the selector does not match
+// SSR'd markup), so every one of these rules would silently die.
+//
+// Each style-substring therefore becomes a class, placed on exactly the elements
+// that match today — enumerated by .migration/audit-responsive.mjs against the
+// live legacy site, and re-checked per page as the port lands.
+const SELECTOR_CLASSES = {
+  'grid-template-columns: 1.2fr 0.8fr': 'r-collapse',
+  'grid-template-columns: 0.75fr 1.25fr': 'r-collapse',
+  'grid-template-columns: 0.9fr 1.1fr': 'r-collapse',
+  'grid-template-columns: 0.8fr 1.2fr': 'r-collapse',
+  'grid-template-columns: 1fr 1fr': 'r-collapse',
+  'grid-template-columns: 1.5fr 1fr 1fr': 'r-collapse',
+  'repeat(5, minmax(0px, 1fr))': 'r-5up',
+  'repeat(3, minmax(0px, 1fr))': 'r-3up',
+  'repeat(12, 1fr)': 'r-12col',
+  'grid-template-columns: 100px 1fr 1fr': 'r-labelled',
+  'grid-template-columns: 120px 1fr 1fr': 'r-labelled',
+  'min-height: 440px': 'r-tall',
+  'min-height: 480px': 'r-tall',
+};
+
+function declassify(css) {
+  let out = css.replace(/\[style\*="([^"]+)"\]/g, (whole, substring) => {
+    const cls = SELECTOR_CLASSES[substring];
+    if (!cls) throw new Error(`no class mapped for [style*="${substring}"]`);
+    return '.' + cls;
+  });
+  // Collapse the duplicates the rewrite creates: six selectors that all became
+  // .r-collapse should be listed once.
+  out = out.replace(/([^{}]+)\{/g, (whole, selectorList) => {
+    if (!selectorList.includes(',')) return whole;
+    const seen = new Set();
+    const kept = selectorList
+      .split(',')
+      .map((s) => s.trim())
+      .filter((s) => s && !seen.has(s) && seen.add(s));
+    const indent = (selectorList.match(/^\s*/) || [''])[0];
+    return indent + kept.join(',\n' + indent.replace(/^\n/, '')) + '{';
+  });
+  if (out.includes('[style*=')) throw new Error('a [style*=…] selector survived the rewrite');
+  return out;
+}
+
 // ── emit ─────────────────────────────────────────────────────────────────────
 const fonts = fs.readFileSync(path.join(SRC, 'fonts.resolved.css'), 'utf8').trim();
 const dedent = (rules) => rules.map((r) => r.replace(/^ {2}/gm, '')).join('\n');
@@ -93,7 +143,7 @@ ${fonts}
 
 ${FULL_PAGE_CSS}
 
-${dedent(shared)}
+${declassify(dedent(shared))}
 `);
 
 const entries = PAGES.map((p) => `  ${p}: \`\n${tails[p].map((r) => r.replace(/^ {2}/gm, '')).join('\n')}\n\`,`).join('\n');

@@ -280,11 +280,39 @@ release avoids starting on an outdated base.
 at boot. Not part of any stylesheet in the bundle, easy to miss, so it now lives
 at the top of `globals.css` with the root element keeping the `dc-root` id.
 
+**D6 — Phase 3's two mechanisms landed early, with Phase 2.** *(Phase 2)*
+The chrome itself needs both, so they were built rather than stubbed:
+`build-pseudo.mjs` turns the 109 `style-<pseudo>` attributes into 15 generated
+classes (heavy dedupe, exactly as the runtime's cache did), and `build-css.mjs`
+rewrites the `[style*=…]` selectors to `.r-*` classes. Confirmed necessary:
+a server-rendered `style="grid-template-columns:1.5fr 1fr 1fr"` does **not**
+match `[style*="grid-template-columns: 1.5fr 1fr 1fr"]`, while the same style
+assigned from JS does. `audit-responsive.mjs` lists the 41 elements needing a
+class (Home 12, Work 8, Services 9, About 9, Contact 3).
+
+**D7 — The shell is a class component.** *(Phase 2)*
+The source was `class Component extends DCLogic` with `state`, `setState`,
+`componentDidMount` and `componentWillUnmount`. A class carries those across
+unchanged; hooks would have meant re-deriving effect boundaries and cleanup
+order, which is where timing drift starts. Two properties make it safe to
+pre-render: initial state is deterministic, and every DOM measurement happens
+after mount.
+
+**D8 — Home's duplicated `mobileNavStyle` is reproduced, not tidied.** *(Phase 2)*
+Home's `renderVals` declared it twice; the second literal wins, so that page
+alone gets `display:flex` and a 1.3rem gap. The inline `display` beats the
+stylesheet's `[data-mobile-nav]{display:none}`, so above 820px Home keeps the
+panel in the layout (translated off-screen) where the other four remove it.
+Found by the chrome comparison, not by reading — it was the only mismatch in 300
+probes.
+
 ## 7. Progress
 
 | Phase | Status |
 | --- | --- |
 | 0 Baseline + extraction | done — 35-shot baseline, 0-pixel repeatability |
 | 1 Scaffold | done — builds and exports; fonts metrically identical |
-| 2 Shared chrome | next |
-| 3–7 | not started |
+| 2 Shared chrome | done — 300 chrome probes and the preloader FLIP identical |
+| 3 Style fidelity | done — pseudo classes and responsive classes generated (see D6) |
+| 4 Page ports | next |
+| 5–7 | not started |

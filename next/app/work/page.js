@@ -1,3 +1,5 @@
+import SiteShell from '../_chrome/SiteShell';
+import PageStyles from '../page-styles';
 import ScaffoldNote from '../scaffold-note';
 
 export const metadata = {
@@ -7,5 +9,12 @@ export const metadata = {
 };
 
 export default function WorkPage() {
-  return <ScaffoldNote page="work" rules={9} />;
+  return (
+    <>
+      <PageStyles page="work" />
+      <SiteShell page="work">
+        <ScaffoldNote page="work" rules={9} />
+      </SiteShell>
+    </>
+  );
 }

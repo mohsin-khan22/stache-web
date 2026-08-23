@@ -54,6 +54,10 @@ const preloaderDone = () => {
 
 async function settle(page) {
   await page.waitForLoadState('load');
+  // Wait for the app to mount before asking whether the preloader is finished:
+  // on a document that has not rendered yet there is no preloader layer to find,
+  // and preloaderDone() would report "done" against the bare unpacking screen.
+  await page.waitForSelector('header', { state: 'attached', timeout: 20000 });
   // Preloader gates on asset loads with a 2.8 s hard cap, then a 260 ms handoff.
   await page.waitForFunction(preloaderDone, null, { timeout: 15000 });
   await page.evaluate(() => document.fonts.ready);
