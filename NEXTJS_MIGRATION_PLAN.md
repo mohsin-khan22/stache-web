@@ -142,7 +142,8 @@ Port the code that is identical on all five pages, once.
    the 1800 ms fallback that only settles above-the-fold elements.
 3. `SiteShell` — preloader panel, moustache SVG, progress bar, header, mobile nav, footer,
    with the exact same markup, inline styles, `data-*` hooks and ARIA labels.
-4. Nav/footer links → `next/link` to `/`, `/work`, `/services`, `/about`, `/contact`.
+4. Nav/footer links → plain `<a href>` to `/`, `/work`, `/services`, `/about`, `/contact`
+   (see decision D2 — not `next/link`).
 
 **Exit:** a scaffold page shows the identical preloader → header → footer sequence; diff of
 the chrome region against baseline is clean.
@@ -241,11 +242,49 @@ SEO/OG tags; accessibility fixes.
 | Hydration mismatch warnings from time/measurement-dependent styles | Initial state is deterministic (`loaded:false`, `slide:0`, `pct:0`), so first paint matches; all measurement happens post-mount |
 | Silent copy drift while retyping markup | Port by transforming the extracted `template.html`, never by re-typing; diff text content page-by-page |
 
-## 6. Decisions I need from you
+## 6. Decisions log (updated as phases land)
 
-1. **Page titles** — keep the literal "Bundled Page", or set real ones? (Recommend: real.)
-2. **Repo layout** — build in `next/` then promote (recommended), or convert in place?
-3. **TypeScript or JavaScript** for the new app? (Recommend: JS — the ported logic is plain JS
-   and TS adds typing work with no fidelity benefit.)
-4. **Static export vs Netlify's Next runtime.** (Recommend: static export; nothing needs a
-   server today.)
+Settled up front: real page titles · build in `next/` then promote · JavaScript ·
+static export.
+
+**D1 — Hand-written `@font-face`, not `next/font/local`.** *(Phase 1)*
+`next/font` mangles the family name and exposes it as a class or CSS variable,
+but several hundred inline styles reference `Inter` and `Oswald` literally. The
+bundle's own `@font-face` rules were ported verbatim, pointing at the extracted
+woff2 files. Verified: text measured in Inter 400/800/900 and Oswald 500/600/700
+is identical to four decimal places between the old site and the new one.
+
+**D2 — No client-side routing; plain `<a href>`.** *(Phase 1)*
+Today every nav link is a plain anchor to another HTML file, so each navigation
+is a full load and **the preloader replays every time**. `next/link` would keep
+the shell mounted and show it only once — a real behavioural change. Plain
+anchors keep the current experience and, as a bonus, make per-route CSS
+leak-proof. Can be revisited in Phase 8.
+
+**D3 — Page-specific CSS stays page-scoped.** *(Phase 1)*
+Measured, not assumed: injecting Contact's `*{box-sizing:border-box}` into the
+other four pages moves **30–59 % of their pixels** (Home 0.04 %, Work 59 %,
+Services 40 %, About 34 % at desktop). `.migration/build-css.mjs` splits the five
+stylesheets into 20 shared rules plus a per-page tail (Home +10, Work +9,
+Services +5, About +5, Contact +4) and asserts the split is lossless. The tail is
+rendered into a hoisted `<style>` on its own route only — confirmed absent from
+the other exported pages.
+
+**D4 — Next 16.3.2 / React 19.**
+The plan said "pin React 18 to match today". Unnecessary: the ported code is our
+own, and both versions serialise inline styles identically. Taking the current
+release avoids starting on an outdated base.
+
+**D5 — Also ported: the runtime's full-page rules.** *(Phase 1)*
+`dc-runtime` injected `html,body{height:100%;margin:0}` and `#dc-root{height:100%}`
+at boot. Not part of any stylesheet in the bundle, easy to miss, so it now lives
+at the top of `globals.css` with the root element keeping the `dc-root` id.
+
+## 7. Progress
+
+| Phase | Status |
+| --- | --- |
+| 0 Baseline + extraction | done — 35-shot baseline, 0-pixel repeatability |
+| 1 Scaffold | done — builds and exports; fonts metrically identical |
+| 2 Shared chrome | next |
+| 3–7 | not started |

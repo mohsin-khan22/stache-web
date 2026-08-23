@@ -1,5 +1,5 @@
 node_modules/
-.server.log
+*.log
 
 # Captured PNGs are large and regenerable; the committed fingerprint.json is the
 # record that a regenerated baseline matches the one signed off on.
