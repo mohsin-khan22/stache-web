@@ -27,6 +27,13 @@ http.createServer((req, res) => {
   const file = firstExisting(base, base + '.html', path.join(base, 'index.html'));
 
   if (!file || !file.startsWith(ROOT)) {
+    // Netlify serves the published 404.html for an unmatched path; match that
+    // so the error page is exercised the same way here.
+    const notFound = path.join(ROOT, '404.html');
+    if (fs.existsSync(notFound)) {
+      res.writeHead(404, { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' });
+      return fs.createReadStream(notFound).pipe(res);
+    }
     res.writeHead(404, { 'content-type': 'text/plain' });
     return res.end('not found: ' + url);
   }
