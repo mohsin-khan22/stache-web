@@ -1,5 +1,6 @@
 'use client';
 
+import SiteLink from './SiteLink';
 import { NAV } from './nav';
 
 const LINK = {
@@ -16,9 +17,9 @@ export default function MobileNav({ style }) {
   return (
     <div data-mobile-nav="" style={style}>
       {NAV.map((item) => (
-        <a key={item.page} href={item.href} style={LINK}>
+        <SiteLink key={item.page} href={item.href} style={LINK}>
           {item.label}
-        </a>
+        </SiteLink>
       ))}
     </div>
   );

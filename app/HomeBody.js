@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useChrome } from './_chrome/chrome-context';
+import SiteLink from './_chrome/SiteLink';
 import { sx } from './pseudo';
 import { HERO_DURATION, HERO_SLIDES } from './hero-slides';
 
@@ -280,7 +281,9 @@ const BADGE = {
 export default function HomeBody() {
   const { addReveal, heroCopyParallax } = useChrome();
   const [slide, setSlide] = useState(0);
+  const [videoOn, setVideoOn] = useState(false);
   const timer = useRef(null);
+  const heroVideo = useRef(null);
   const reduceMotion = useRef(false);
 
   // Same as the original: the autoplay never starts under reduced motion, and
@@ -295,6 +298,7 @@ export default function HomeBody() {
 
   useEffect(() => {
     reduceMotion.current = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (reduceMotion.current && heroVideo.current) heroVideo.current.pause();
     startHeroTimer();
     return () => clearInterval(timer.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -319,6 +323,28 @@ export default function HomeBody() {
       willChange: 'opacity, transform',
       pointerEvents: 'none',
     };
+  };
+
+  // The showreel sits on top of the slideshow and fades in once it is actually
+  // rolling, so a slow connection, a decode failure or a blocked autoplay all
+  // just leave the original three-slide hero in place.
+  const heroVideoStyle = {
+    position: 'absolute',
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    objectPosition: '50% 50%',
+    filter: 'saturate(0.98) contrast(1.05) brightness(0.92)',
+    opacity: videoOn ? 1 : 0,
+    transition: 'opacity 1.4s cubic-bezier(.4,0,.2,1)',
+    pointerEvents: 'none',
+  };
+
+  const onHeroVideoPlaying = () => {
+    if (reduceMotion.current) return;
+    clearInterval(timer.current);
+    setVideoOn(true);
   };
 
   const heroTrackStyle = (i) => ({
@@ -361,6 +387,20 @@ export default function HomeBody() {
           <div style={heroSlideStyle(0)} />
           <div style={heroSlideStyle(1)} />
           <div style={heroSlideStyle(2)} />
+          <video
+            ref={heroVideo}
+            style={heroVideoStyle}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/assets/video/hero-showreel-poster.jpg"
+            onPlaying={onHeroVideoPlaying}
+            tabIndex={-1}
+          >
+            <source src="/assets/video/hero-showreel.mp4" type="video/mp4" />
+          </video>
           <div
             style={{
               position: 'absolute',
@@ -498,7 +538,7 @@ export default function HomeBody() {
                 STACHE is a marketing and advertising agency where creative disruption meets calculated strategy — for
                 brands that crave distinction, not just visibility.
               </p>
-              <a
+              <SiteLink
                 href="/work"
                 style={{
                   display: 'inline-flex',
@@ -519,39 +559,41 @@ export default function HomeBody() {
                 className={sx({ hover: 'background:#fff;border-color:#fff;color:#ef2329;transform:translateY(-2px)' })}
               >
                 Explore the work <span data-arrow="">↗</span>
-              </a>
+              </SiteLink>
             </div>
           </div>
 
-          <div
-            ref={addReveal}
-            data-hero-controls=""
-            role="group"
-            aria-label="Hero background slideshow"
-            style={{
-              opacity: 0,
-              transform: 'translateY(28px)',
-              transition: 'opacity .8s ease .3s,transform .8s cubic-bezier(.2,.8,.2,1) .3s',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingTop: '0.4rem',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              {HERO_SLIDES.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={goSlide(i)}
-                  aria-label={`Show slide ${i + 1}`}
-                  style={heroTrackStyle(i)}
-                >
-                  <span style={heroFillStyle(i)} />
-                </button>
-              ))}
+          {!videoOn && (
+            <div
+              ref={addReveal}
+              data-hero-controls=""
+              role="group"
+              aria-label="Hero background slideshow"
+              style={{
+                opacity: 0,
+                transform: 'translateY(28px)',
+                transition: 'opacity .8s ease .3s,transform .8s cubic-bezier(.2,.8,.2,1) .3s',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingTop: '0.4rem',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                {HERO_SLIDES.map((_, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={goSlide(i)}
+                    aria-label={`Show slide ${i + 1}`}
+                    style={heroTrackStyle(i)}
+                  >
+                    <span style={heroFillStyle(i)} />
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -685,7 +727,7 @@ export default function HomeBody() {
               We specialize in digital marketing management, social consultancy, and conceptual project execution. Every
               idea, post, campaign, and pixel is backed by intent.
             </p>
-            <a
+            <SiteLink
               href="/about"
               style={{
                 fontWeight: 900,
@@ -698,7 +740,7 @@ export default function HomeBody() {
               }}
             >
               Meet the agency <span style={{ color: '#ef2329' }}>↗</span>
-            </a>
+            </SiteLink>
           </div>
         </div>
       </section>
@@ -900,9 +942,9 @@ export default function HomeBody() {
             ))}
           </div>
           <div style={{ marginTop: '2rem' }}>
-            <a href="/services" style={GHOST_BUTTON} className={sx(GHOST_HOVER)}>
+            <SiteLink href="/services" style={GHOST_BUTTON} className={sx(GHOST_HOVER)}>
               See all capabilities <span data-arrow="">↗</span>
-            </a>
+            </SiteLink>
           </div>
         </div>
       </section>
@@ -945,7 +987,7 @@ export default function HomeBody() {
           </div>
           <div className="r-12col" style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: '1.4rem' }}>
             {PROJECTS.map((p) => (
-              <a
+              <SiteLink
                 key={p.title}
                 href="/work"
                 ref={addReveal}
@@ -1009,13 +1051,13 @@ export default function HomeBody() {
                     ↗
                   </span>
                 </div>
-              </a>
+              </SiteLink>
             ))}
           </div>
           <div style={{ marginTop: '2rem' }}>
-            <a href="/work" style={GHOST_BUTTON} className={sx(GHOST_HOVER)}>
+            <SiteLink href="/work" style={GHOST_BUTTON} className={sx(GHOST_HOVER)}>
               View all projects <span data-arrow="">↗</span>
-            </a>
+            </SiteLink>
           </div>
         </div>
       </section>
@@ -1077,7 +1119,7 @@ export default function HomeBody() {
               <p style={{ maxWidth: '530px', fontSize: '1.15rem', margin: 0, color: '#fff' }}>
                 Bring us the ambition. We will bring the strategy, creative force, and executional discipline.
               </p>
-              <a
+              <SiteLink
                 href="/contact"
                 style={{
                   display: 'inline-flex',
@@ -1096,7 +1138,7 @@ export default function HomeBody() {
                 className={sx({ hover: 'background:#fff;color:#ef2329;transform:translateY(-2px);white-space:nowrap' })}
               >
                 Get in touch <span data-arrow="">↗</span>
-              </a>
+              </SiteLink>
             </div>
           </div>
         </div>

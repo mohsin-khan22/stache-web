@@ -4,6 +4,7 @@
 //
 // Sources:
 //   ../assets/images              images already on disk (Home hero, Work cards)
+//   ../assets/video               the encoded Home hero showreel and its poster
 //   ../.migration/src/assets      fonts, logo and the 4 images that were only
 //                                 ever embedded inside the bundles
 //
@@ -18,6 +19,7 @@ const PUBLIC = path.join(APP, 'public');
 
 const COPIES = [
   [path.join(REPO, 'assets', 'images'), path.join(PUBLIC, 'assets', 'images')],
+  [path.join(REPO, 'assets', 'video'), path.join(PUBLIC, 'assets', 'video')],
   [path.join(REPO, '.migration', 'src', 'assets', 'images'), path.join(PUBLIC, 'assets', 'images')],
   [path.join(REPO, '.migration', 'src', 'assets', 'fonts'), path.join(PUBLIC, 'fonts')],
 ];

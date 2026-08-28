@@ -1,4 +1,3 @@
-import SiteShell from '../_chrome/SiteShell';
 import PageStyles from '../page-styles';
 import WorkBody from './WorkBody';
 
@@ -12,9 +11,7 @@ export default function WorkPage() {
   return (
     <>
       <PageStyles page="work" />
-      <SiteShell page="work">
-        <WorkBody />
-      </SiteShell>
+      <WorkBody />
     </>
   );
 }

@@ -1,4 +1,3 @@
-import SiteShell from '../_chrome/SiteShell';
 import PageStyles from '../page-styles';
 import ContactBody from './ContactBody';
 
@@ -11,9 +10,7 @@ export default function ContactPage() {
   return (
     <>
       <PageStyles page="contact" />
-      <SiteShell page="contact">
-        <ContactBody />
-      </SiteShell>
+      <ContactBody />
     </>
   );
 }

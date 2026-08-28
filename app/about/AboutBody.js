@@ -1,6 +1,7 @@
 'use client';
 
 import { useChrome } from '../_chrome/chrome-context';
+import SiteLink from '../_chrome/SiteLink';
 import { sx } from '../pseudo';
 
 const CONTAINER = { width: 'min(calc(100% - 3rem),1440px)', margin: 'auto' };
@@ -448,7 +449,7 @@ export default function AboutBody() {
               <p style={{ maxWidth: '530px', fontSize: '1.15rem', margin: 0, color: '#fff' }}>
                 See how our strategy, creative, production, and campaign capabilities come together.
               </p>
-              <a
+              <SiteLink
                 href="/services"
                 style={{
                   display: 'inline-flex',
@@ -467,7 +468,7 @@ export default function AboutBody() {
                 className={sx({ hover: 'background:#fff;color:#ef2329;transform:translateY(-2px);white-space:nowrap' })}
               >
                 Explore services <span data-arrow="">↗</span>
-              </a>
+              </SiteLink>
             </div>
           </div>
         </div>

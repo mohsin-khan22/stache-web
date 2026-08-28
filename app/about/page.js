@@ -1,4 +1,3 @@
-import SiteShell from '../_chrome/SiteShell';
 import PageStyles from '../page-styles';
 import AboutBody from './AboutBody';
 
@@ -12,9 +11,7 @@ export default function AboutPage() {
   return (
     <>
       <PageStyles page="about" />
-      <SiteShell page="about">
-        <AboutBody />
-      </SiteShell>
+      <AboutBody />
     </>
   );
 }

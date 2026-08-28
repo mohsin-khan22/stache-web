@@ -1,5 +1,6 @@
 import './globals.css';
 import './pseudo.css';
+import RouteShell from './_chrome/RouteShell';
 
 export const metadata = {
   title: {
@@ -19,7 +20,12 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {/* The chrome lives here, not in the pages, so it survives client-side
+            navigation and the preloader runs once per document rather than on
+            every link click. */}
+        <RouteShell>{children}</RouteShell>
+      </body>
     </html>
   );
 }

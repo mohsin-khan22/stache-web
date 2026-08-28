@@ -1,5 +1,6 @@
 'use client';
 
+import SiteLink from './SiteLink';
 import { sx } from '../pseudo';
 import { NAV, CONTAINER } from './nav';
 
@@ -56,32 +57,33 @@ const TOGGLE = {
 
 // The 820px breakpoint hides the nav and `header a:nth-of-type(2)` — the CTA,
 // second <a> among its siblings — so the element order here is load-bearing.
+// SiteLink renders a real <a> either way, so the selector still finds it.
 export default function Header({ page, headerStyle, menuIcon, onToggleNav }) {
   return (
     <header style={headerStyle}>
       <div style={{ ...CONTAINER, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <a href="/" aria-label="STACHE home" style={{ width: '154px', position: 'relative', zIndex: 902 }}>
+        <SiteLink href="/" aria-label="STACHE home" style={{ width: '154px', position: 'relative', zIndex: 902 }}>
           <img data-header-logo="" src="/logo.svg" alt="STACHE" style={{ display: 'block', width: '100%' }} />
-        </a>
+        </SiteLink>
         <nav aria-label="Primary navigation" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
           {NAV.map((item) =>
             item.page === page ? (
-              <a key={item.page} href={item.href} style={LINK_ACTIVE}>
+              <SiteLink key={item.page} href={item.href} style={LINK_ACTIVE}>
                 {item.label}
-              </a>
+              </SiteLink>
             ) : (
-              <a
+              <SiteLink
                 key={item.page}
                 href={item.href}
                 style={LINK}
                 className={sx({ hover: 'color:#f2eee5;box-shadow:inset 0 -2px 0 #ef2329' })}
               >
                 {item.label}
-              </a>
+              </SiteLink>
             ),
           )}
         </nav>
-        <a
+        <SiteLink
           href="/contact"
           style={CTA}
           className={sx({
@@ -90,7 +92,7 @@ export default function Header({ page, headerStyle, menuIcon, onToggleNav }) {
           })}
         >
           Get in touch <span data-arrow="">↗</span>
-        </a>
+        </SiteLink>
         <button data-menu-toggle="" onClick={onToggleNav} aria-label="Toggle navigation" style={TOGGLE}>
           {menuIcon}
         </button>

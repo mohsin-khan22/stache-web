@@ -1,6 +1,7 @@
 'use client';
 
 import { useChrome } from '../_chrome/chrome-context';
+import SiteLink from '../_chrome/SiteLink';
 import { sx } from '../pseudo';
 
 const CONTAINER = { width: 'min(calc(100% - 3rem),1440px)', margin: 'auto' };
@@ -413,7 +414,7 @@ export default function ServicesBody() {
               <p style={{ maxWidth: '530px', fontSize: '1.15rem', margin: 0, color: '#fff' }}>
                 Tell us the challenge, the audience, and the ambition. We will shape the route forward.
               </p>
-              <a
+              <SiteLink
                 href="/contact"
                 style={{
                   display: 'inline-flex',
@@ -432,7 +433,7 @@ export default function ServicesBody() {
                 className={sx({ hover: 'background:#fff;color:#ef2329;transform:translateY(-2px);white-space:nowrap' })}
               >
                 Brief STACHE <span data-arrow="">↗</span>
-              </a>
+              </SiteLink>
             </div>
           </div>
         </div>

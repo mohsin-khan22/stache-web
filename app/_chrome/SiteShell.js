@@ -245,6 +245,26 @@ export default class SiteShell extends Component {
     }, 1800);
   }
 
+  componentDidUpdate(prev) {
+    if (prev.page === this.props.page) return;
+    // Client-side navigation replaced the page body while the shell stayed
+    // mounted. Drop the elements that left with the old page, then give the new
+    // ones their stagger — addReveal has already registered and observed them
+    // during commit, but only the mount path applied delays.
+    //
+    // Synchronous rather than in a requestAnimationFrame, unlike the mount
+    // pass: every child has committed by the time this runs, and an
+    // IntersectionObserver callback cannot land before it, so the delay is in
+    // place before anything can reveal.
+    this.revealEls = this.revealEls.filter((el) => el.isConnected);
+    this.revealEls.forEach((el) => {
+      const sibs = Array.from(el.parentElement ? el.parentElement.children : []).filter((c) => this.revealEls.includes(c));
+      const i = sibs.indexOf(el);
+      if (i > 0 && !el.style.transitionDelay) el.style.transitionDelay = Math.min(i * 0.07, 0.35) + 's';
+      if (this._io) this._io.observe(el);
+    });
+  }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this._onScroll);
     clearTimeout(this._timer);

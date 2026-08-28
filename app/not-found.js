@@ -1,4 +1,4 @@
-import SiteShell from './_chrome/SiteShell';
+import SiteLink from './_chrome/SiteLink';
 
 // An addition, not a port: the bundled site had no 404 page and Netlify served
 // its own. Next emits 404.html either way, and its default is an unstyled white
@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <SiteShell page={null}>
+    <>
       <section style={{ padding: '12rem 0 10rem' }}>
         <div style={{ width: 'min(calc(100% - 3rem),1440px)', margin: 'auto' }}>
           <div
@@ -58,7 +58,7 @@ export default function NotFound() {
           >
             The link is broken or the page has moved. Everything else is still where you left it.
           </p>
-          <a
+          <SiteLink
             href="/"
             style={{
               display: 'inline-flex',
@@ -77,9 +77,9 @@ export default function NotFound() {
             }}
           >
             Back to home <span data-arrow="">↗</span>
-          </a>
+          </SiteLink>
         </div>
       </section>
-    </SiteShell>
+    </>
   );
 }

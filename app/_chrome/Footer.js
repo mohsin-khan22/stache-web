@@ -1,5 +1,6 @@
 'use client';
 
+import SiteLink from './SiteLink';
 import { sx } from '../pseudo';
 import { CONTAINER } from './nav';
 
@@ -46,17 +47,17 @@ export default function Footer() {
           <div>
             <h4 style={HEADING}>Navigate</h4>
             {NAVIGATE.map(([href, label]) => (
-              <a key={label} href={href} style={LINK} className={sx({ hover: LINK_HOVER })}>
+              <SiteLink key={label} href={href} style={LINK} className={sx({ hover: LINK_HOVER })}>
                 {label}
-              </a>
+              </SiteLink>
             ))}
           </div>
           <div>
             <h4 style={HEADING}>Start a conversation</h4>
             {CONVERSATION.map(([href, label]) => (
-              <a key={label} href={href} style={LINK} className={sx({ hover: LINK_HOVER })}>
+              <SiteLink key={label} href={href} style={LINK} className={sx({ hover: LINK_HOVER })}>
                 {label}
-              </a>
+              </SiteLink>
             ))}
           </div>
         </div>

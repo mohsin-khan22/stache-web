@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useChrome } from '../_chrome/chrome-context';
+import SiteLink from '../_chrome/SiteLink';
 import { sx } from '../pseudo';
 
 const PROJECTS = [
@@ -328,7 +329,7 @@ export default function WorkBody() {
                 From a sharper social presence to a fully realised campaign ecosystem, let us build the work that moves
                 your audience.
               </p>
-              <a
+              <SiteLink
                 href="/contact"
                 style={{
                   display: 'inline-flex',
@@ -347,7 +348,7 @@ export default function WorkBody() {
                 className={sx({ hover: 'background:#fff;color:#ef2329;transform:translateY(-2px);white-space:nowrap' })}
               >
                 Get in touch <span data-arrow="">↗</span>
-              </a>
+              </SiteLink>
             </div>
           </div>
         </div>
