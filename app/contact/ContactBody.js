@@ -73,8 +73,6 @@ const SERVICES = [
   'Not sure yet',
 ];
 
-const BUDGETS = ['Prefer to discuss', 'Under AED 50k', 'AED 50k–150k', 'AED 150k–500k', 'AED 500k+'];
-
 // PRE-EXISTING BUG, reproduced deliberately: the three starred fields are not
 // actually required on the live site. The template wrote `required=""`, which
 // React treats as a falsy boolean prop and drops, so no `required` attribute
@@ -251,15 +249,6 @@ export default function ContactBody() {
               <select id="service" name="service" style={FIELD} className={sx({ focus: FOCUS })}>
                 {SERVICES.map((s) => (
                   <option key={s}>{s}</option>
-                ))}
-              </select>,
-            )}
-            {field(
-              'budget',
-              'Indicative budget',
-              <select id="budget" name="budget" style={FIELD} className={sx({ focus: FOCUS })}>
-                {BUDGETS.map((b) => (
-                  <option key={b}>{b}</option>
                 ))}
               </select>,
             )}

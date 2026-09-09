@@ -105,14 +105,6 @@ const PILLARS = [
   },
 ];
 
-const PROCESS = [
-  ['01', 'Discover', 'We interrogate the brief, audience, context, culture, and commercial goal before deciding what the work should become.'],
-  ['02', 'Define', 'We establish the strategic platform: positioning, message, creative territory, channels, measures, and delivery plan.'],
-  ['03', 'Create', 'We design ideas, content systems, campaign assets, films, activations, and experiences with a distinctive STACHE edge.'],
-  ['04', 'Deploy', 'We manage rollout across platforms and touchpoints, coordinating production, media, community, events, and partners.'],
-  ['05', 'Optimise', 'We learn from performance, refine the work, and keep momentum moving toward stronger outcomes.'],
-];
-
 export default function ServicesBody() {
   const { addReveal, heroCopyParallax } = useChrome();
   const heroCopyStyle = Object.assign({ ...CONTAINER, position: 'relative', zIndex: 1 }, heroCopyParallax(560));
@@ -303,75 +295,6 @@ export default function ServicesBody() {
               </article>
             );
           })}
-        </div>
-      </section>
-
-      <section style={{ padding: '8rem 0' }}>
-        <div style={CONTAINER}>
-          <div ref={addReveal} style={{ ...EYEBROW, marginBottom: '1rem' }}>
-            <span data-rule="" ref={addReveal} style={RULE} />
-            How we work
-          </div>
-          <h2
-            ref={addReveal}
-            style={{
-              ...REVEAL,
-              fontFamily: OSWALD,
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '-0.055em',
-              lineHeight: 0.95,
-              margin: '0 0 3rem',
-              fontSize: 'clamp(2.3rem,4.4vw,4.4rem)',
-            }}
-          >
-            From ambition
-            <br />
-            to <span style={{ color: '#ef2329' }}>impact.</span>
-          </h2>
-          <div>
-            {PROCESS.map(([n, title, body], i) => (
-              <div
-                key={n}
-                ref={addReveal}
-                className="r-labelled"
-                style={{
-                  ...REVEAL,
-                  display: 'grid',
-                  gridTemplateColumns: '120px 1fr 1fr',
-                  gap: '2rem',
-                  padding: '2.3rem 0',
-                  borderTop: '1px solid rgba(255,255,255,0.14)',
-                  ...(i === PROCESS.length - 1 ? { borderBottom: '1px solid rgba(255,255,255,0.14)' } : null),
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: OSWALD,
-                    fontSize: '1.5rem',
-                    lineHeight: 1.1,
-                    letterSpacing: '0.03em',
-                    color: '#ef2329',
-                  }}
-                >
-                  {n}
-                </div>
-                <h3
-                  style={{
-                    fontFamily: OSWALD,
-                    fontSize: '1.6rem',
-                    textTransform: 'uppercase',
-                    lineHeight: 1.1,
-                    letterSpacing: '0.005em',
-                    margin: 0,
-                  }}
-                >
-                  {title}
-                </h3>
-                <p style={{ margin: 0, color: '#a7a7a7', maxWidth: '560px' }}>{body}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

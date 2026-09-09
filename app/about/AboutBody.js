@@ -36,14 +36,6 @@ const H2 = {
   fontSize: 'clamp(2.3rem,4.4vw,4.4rem)',
 };
 
-const PRINCIPLES = [
-  ['01', 'Intentional impact', 'Every decision is tied to a purpose. Strategy gives creative work direction, and direction gives it commercial force.'],
-  ['02', 'Authenticity always', 'We create brand voices that sound true to the organisation and meaningful to the audience.'],
-  ['03', 'Fearless creativity', 'We push boundaries to create work that surprises, stirs, and sticks — without losing strategic focus.'],
-  ['04', 'Momentum over comfort', 'We keep brands moving forward through proactive thinking, fast learning, and decisive execution.'],
-  ['05', 'Together, louder', 'Strong work is collaborative. We operate as an extension of the client team, aligned around one shared ambition.'],
-];
-
 // The soft hyphen in "Resource­fulness" is in the source copy — it lets the
 // word break inside the narrow card.
 const CAPABILITIES = [
@@ -256,64 +248,6 @@ export default function AboutBody() {
             <p style={{ color: '#a7a7a7', maxWidth: '620px', margin: 0 }}>
               His mission is simple: helping businesses tell their stories, memorably.
             </p>
-          </div>
-        </div>
-      </section>
-
-      <section style={{ padding: '8rem 0' }}>
-        <div style={CONTAINER}>
-          <div ref={addReveal} style={{ ...EYEBROW, marginBottom: '1rem' }}>
-            <span data-rule="" ref={addReveal} style={RULE} />
-            What we stand for
-          </div>
-          <h2 ref={addReveal} style={{ ...REVEAL, ...H2, margin: '0 0 3rem' }}>
-            Principles with
-            <br />
-            <span style={{ color: '#ef2329' }}>a pulse.</span>
-          </h2>
-          <div>
-            {PRINCIPLES.map(([n, title, body], i) => (
-              <div
-                key={n}
-                ref={addReveal}
-                className="r-labelled"
-                style={{
-                  ...REVEAL,
-                  display: 'grid',
-                  gridTemplateColumns: '100px 1fr 1fr',
-                  gap: '2rem',
-                  padding: '2rem 0',
-                  borderTop: '1px solid rgba(255,255,255,0.14)',
-                  ...(i === PRINCIPLES.length - 1 ? { borderBottom: '1px solid rgba(255,255,255,0.14)' } : null),
-                  alignItems: 'start',
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "Oswald,'Arial Narrow',sans-serif",
-                    fontSize: '1.5rem',
-                    lineHeight: 1.1,
-                    letterSpacing: '0.03em',
-                    color: '#ef2329',
-                  }}
-                >
-                  {n}
-                </div>
-                <h3
-                  style={{
-                    fontFamily: "Oswald,'Arial Narrow',sans-serif",
-                    fontSize: '1.6rem',
-                    textTransform: 'uppercase',
-                    lineHeight: 1.1,
-                    letterSpacing: '0.005em',
-                    margin: 0,
-                  }}
-                >
-                  {title}
-                </h3>
-                <p style={{ margin: 0, color: '#a7a7a7' }}>{body}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

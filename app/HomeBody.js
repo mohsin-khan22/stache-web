@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useChrome } from './_chrome/chrome-context';
 import SiteLink from './_chrome/SiteLink';
 import { sx } from './pseudo';
@@ -46,32 +46,6 @@ const SHEEN = {
   backgroundClip: 'text',
   color: 'transparent',
   animation: 'sheen 7s linear infinite',
-};
-
-const MARQUEE_WORDS = [
-  'Digital marketing',
-  'Social consultancy',
-  'Conceptual execution',
-  'Brand strategy',
-  'Content systems',
-  'Activations',
-  'Storytelling',
-];
-
-const MARQUEE_WORD = {
-  fontFamily: OSWALD,
-  fontSize: 'clamp(1.4rem,2.6vw,2.6rem)',
-  textTransform: 'uppercase',
-  marginRight: '2rem',
-};
-
-const MARQUEE_STAR = {
-  color: '#ef2329',
-  marginRight: '2rem',
-  fontStyle: 'normal',
-  fontSize: '1.1rem',
-  lineHeight: 1,
-  verticalAlign: '0.3em',
 };
 
 const CARD_HOVER =
@@ -335,7 +309,7 @@ export default function HomeBody() {
     height: '100%',
     objectFit: 'cover',
     objectPosition: '50% 50%',
-    filter: 'saturate(0.98) contrast(1.05) brightness(0.92)',
+    filter: 'saturate(0.98) contrast(1.05) brightness(1.14)',
     opacity: videoOn ? 1 : 0,
     transition: 'opacity 1.4s cubic-bezier(.4,0,.2,1)',
     pointerEvents: 'none',
@@ -406,14 +380,14 @@ export default function HomeBody() {
               position: 'absolute',
               inset: 0,
               background:
-                'linear-gradient(180deg,rgba(5,5,5,0.6) 0%,rgba(5,5,5,0.2) 32%,rgba(5,5,5,0.76) 74%,#050505 100%)',
+                'linear-gradient(180deg,rgba(5,5,5,0.46) 0%,rgba(5,5,5,0.1) 32%,rgba(5,5,5,0.66) 74%,#050505 100%)',
             }}
           />
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(90deg,rgba(5,5,5,0.94) 0%,rgba(5,5,5,0.7) 42%,rgba(5,5,5,0.12) 100%)',
+              background: 'linear-gradient(90deg,rgba(5,5,5,0.86) 0%,rgba(5,5,5,0.56) 42%,rgba(5,5,5,0.06) 100%)',
             }}
           />
           <div
@@ -597,32 +571,6 @@ export default function HomeBody() {
         </div>
       </section>
 
-      <div
-        style={{
-          overflow: 'hidden',
-          borderTop: '1px solid rgba(255,255,255,0.14)',
-          borderBottom: '1px solid rgba(255,255,255,0.14)',
-          padding: '1.25rem 0',
-          background: '#090909',
-        }}
-        aria-hidden="true"
-      >
-        <div
-          style={{ display: 'flex', alignItems: 'center', width: 'max-content', animation: 'marquee 30s linear infinite' }}
-          className={sx({ hover: 'animation-play-state:paused' })}
-        >
-          {/* The list runs twice so the -50% keyframe loops seamlessly. Fragment
-              rather than a wrapper element: the marquee is a flat run of
-              span/i siblings, and anything in between would change the tree. */}
-          {[...MARQUEE_WORDS, ...MARQUEE_WORDS].map((word, i) => (
-            <Fragment key={i}>
-              <span style={MARQUEE_WORD}>{word}</span>
-              <i style={MARQUEE_STAR}>✦</i>
-            </Fragment>
-          ))}
-        </div>
-      </div>
-
       <section style={{ padding: '8rem 0' }}>
         <div
           className="r-collapse"
@@ -741,6 +689,72 @@ export default function HomeBody() {
             >
               Meet the agency <span style={{ color: '#ef2329' }}>↗</span>
             </SiteLink>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '8rem 0' }}>
+        <div
+          className="r-collapse"
+          style={{ ...CONTAINER, display: 'grid', gridTemplateColumns: '0.9fr 1.1fr', gap: '4rem', alignItems: 'center' }}
+        >
+          <div
+            ref={addReveal}
+            data-media=""
+            style={{ ...REVEAL, height: '600px', borderRadius: '22px', overflow: 'hidden', position: 'relative' }}
+          >
+            <img
+              src="/assets/images/about-founder-ahmed-rezk.jpg"
+              alt="Ahmed Rezk, founder of STACHE"
+              data-zoom=""
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(120deg,rgba(239,35,41,0.18),transparent 55%)',
+              }}
+            />
+          </div>
+          <div
+            ref={addReveal}
+            style={{
+              opacity: 0,
+              transform: 'translateY(28px)',
+              transition: 'opacity .8s ease .1s,transform .8s cubic-bezier(.2,.8,.2,1) .1s',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+            }}
+          >
+            {/* Eyebrow styles are inline rather than the EYEBROW constant: that
+                constant carries REVEAL's opacity:0 and only the parent here is
+                registered with addReveal, so a spread child would never fade in. */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.8rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.18em',
+                fontWeight: 800,
+                fontSize: '0.76rem',
+                color: '#ef2329',
+              }}
+            >
+              <span data-rule="" ref={addReveal} style={RULE} />
+              Meet the Founder
+            </div>
+            <h2 style={{ ...H2, lineHeight: 0.96, fontSize: 'clamp(2.1rem,3.6vw,3.4rem)' }}>Ahmed Rezk</h2>
+            <p style={{ fontSize: 'clamp(1rem,1.25vw,1.12rem)', color: '#d2d2d2', maxWidth: '620px', margin: 0 }}>
+              Ahmed Rezk is a creative disrupter with 16 years in Dubai and experience spanning almost every industry.
+              He tackles business challenges with solutions no one else sees coming — pairing sharp storytelling
+              instincts with a real understanding of what different audiences need.
+            </p>
+            <p style={{ color: '#a7a7a7', maxWidth: '620px', margin: 0 }}>
+              His mission is simple: helping businesses tell their stories, memorably.
+            </p>
           </div>
         </div>
       </section>

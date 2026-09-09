@@ -4,7 +4,6 @@
 
 export const PAGE_CSS = {
   home: `
-@keyframes marquee{to{transform:translateX(-50%)}}
 @keyframes float{50%{transform:translateY(-10px) rotate(3deg)}}
 [data-boldness]{font-size:min(6rem,22cqw) !important}
 /* hero background slideshow */
