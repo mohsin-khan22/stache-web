@@ -120,10 +120,35 @@ export default function ContactBody() {
   );
 
   return (
-    <section style={{ padding: '9rem 0 8rem' }} data-comment-anchor="6dfec2a67d-section">
+    <section
+      style={{ padding: '9rem 0 8rem', position: 'relative', overflow: 'hidden' }}
+      data-comment-anchor="6dfec2a67d-section"
+    >
+      <div
+        data-orb=""
+        aria-hidden="true"
+        style={{
+          // Mirrored to the left of where the other pages put it, and pushed
+          // further out. This page is a form, not a hero: an arc crossing the
+          // fields reads as a stray line rather than as atmosphere, so only a
+          // shallow sliver clears the corner, under the contact panel.
+          position: 'absolute',
+          inset: 'auto auto -34vw -20vw',
+          width: '54vw',
+          height: '54vw',
+          borderRadius: '50%',
+          border: '1px solid rgba(239,35,41,0.25)',
+          pointerEvents: 'none',
+        }}
+      />
       <div
         className="r-collapse"
         style={{
+          // Above the orb, the way every other page lifts its hero copy over
+          // one: the orb is positioned and the content is not, so without this
+          // a 1px arc paints across the panel instead of behind it.
+          position: 'relative',
+          zIndex: 1,
           width: 'min(calc(100% - 3rem),1440px)',
           margin: 'auto',
           display: 'grid',

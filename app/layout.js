@@ -1,5 +1,6 @@
 import './globals.css';
 import './pseudo.css';
+import './motion.css';
 import RouteShell from './_chrome/RouteShell';
 
 export const metadata = {

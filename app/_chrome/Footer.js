@@ -3,6 +3,7 @@
 import SiteLink from './SiteLink';
 import { sx } from '../pseudo';
 import { CONTAINER } from './nav';
+import { useChrome } from './chrome-context';
 
 const HEADING = {
   textTransform: 'uppercase',
@@ -33,10 +34,23 @@ const CONVERSATION = [
 // r-collapse replaces the `[style*="grid-template-columns: 1.5fr 1fr 1fr"]`
 // selector, which cannot match server-rendered markup.
 export default function Footer() {
+  // The only block on the site the observer never watched, which left its
+  // heading and its standfirst as the one piece of type on every page with no
+  // entrance. Registering the row is enough — motion.css animates the type
+  // inside anything that reveals.
+  //
+  // No opacity:0 to go with it, unlike the page bodies: the footer renders
+  // visible and stays visible if the observer never arrives. All the ref buys
+  // is the attribute the type animations key off.
+  const { addReveal } = useChrome();
   return (
     <footer style={{ padding: '5rem 0 2rem', borderTop: '1px solid rgba(255,255,255,0.14)' }}>
       <div style={CONTAINER}>
-        <div className="r-collapse" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '3rem' }}>
+        <div
+          ref={addReveal}
+          className="r-collapse"
+          style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '3rem' }}
+        >
           <div>
             <img src="/logo.svg" alt="STACHE" style={{ width: '220px', marginBottom: '1.5rem' }} />
             <p style={{ color: '#a7a7a7' }}>

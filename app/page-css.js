@@ -45,6 +45,9 @@ export const PAGE_CSS = {
 [data-numeral]{animation:numFloat 9s ease-in-out infinite;will-change:transform}
 `,
   contact: `
+/* --- ambient motion --- */
+@keyframes orbDrift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-2.4%,-1.8%,0) scale(1.05)}}
+[data-orb]{animation:orbDrift 19s ease-in-out infinite;will-change:transform}
 *{box-sizing:border-box}
 input,select,textarea,button{font:inherit;max-width:100%}
 @media (max-width:900px){form{grid-template-columns:1fr !important}}

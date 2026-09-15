@@ -4,14 +4,26 @@ import { useState } from 'react';
 import { useChrome } from '../_chrome/chrome-context';
 import SiteLink from '../_chrome/SiteLink';
 import { sx } from '../pseudo';
+import { FLIP_EASE } from '../_chrome/motion';
 
+// Nine covers supplied by the client, replacing the imagery the bundle shipped
+// with. Sizes tile the 12-column grid exactly: 8+4, 4+8, 8+4, then three 4s.
+//
+// The four that carried over — Mercedes-Benz, Talabat, NSTI and Climate Change
+// — keep the sector lines they already had. The five new brands have PLACEHOLDER
+// sector lines, marked below: they describe what is visible in the cover, not
+// what the engagement actually was, and want replacing with the real scope.
 const PROJECTS = [
-  { title: 'Dubai Health Authority', sector: 'Social · Events · Podcast', category: 'government', image: '/assets/images/01_DHA_brain.jpg', fit: 'cover', pos: 'center 49%', alt: 'Dubai Health Authority project', size: 'large' },
-  { title: 'DET', sector: 'Transition · Social · Campaigns', category: 'government', image: '/assets/images/02_DET_dubai_dinner.jpg', fit: 'cover', pos: 'center 45%', alt: 'Dubai Economy and Tourism project', size: 'small' },
-  { title: 'NSTI Festival', sector: 'Launch · Social · Performance', category: 'government', image: '/assets/images/05_NSTI_Festival_VR.jpg', fit: 'contain', alt: 'NSTI Festival project', size: 'small' },
-  { title: 'Climate Change & Environment', sector: 'Immersive video · Localisation', category: 'government', image: '/assets/images/06_ClimateChange_Mangroves.jpg', fit: 'cover', pos: 'center 45%', alt: 'Ministry of Climate Change and Environment project', size: 'large' },
-  { title: 'Mercedes-Benz', sector: 'Social · Performance · Video', category: 'automotive', image: '/assets/images/03_MercedesBenz_red.jpg', fit: 'cover', pos: 'center 50%', alt: 'Mercedes-Benz project', size: 'small' },
-  { title: 'Talabat', sector: 'Video · Social content', category: 'lifestyle', image: '/assets/images/04_Talabat_Ronaldo.jpg', fit: 'cover', pos: 'center 40%', alt: 'Talabat social project', size: 'large' },
+  { title: 'Mercedes-Benz', sector: 'Social · Performance · Video', category: 'automotive', image: '/assets/images/mercedes-benz.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mercedes-Benz GLE at night on a Dubai highway', size: 'large' },
+  { title: 'Talabat', sector: 'Video · Social content', category: 'lifestyle', image: '/assets/images/talabat.jpg', fit: 'cover', pos: 'center 45%', alt: 'Talabat gaming campaign', size: 'small' },
+  { title: 'NSTI Festival', sector: 'Launch · Social · Performance', category: 'government', image: '/assets/images/nsti-festival.jpg', fit: 'cover', pos: 'center 45%', alt: 'NSTI Festival virtual reality experience', size: 'small' },
+  { title: 'Climate Change & Environment', sector: 'Immersive video · Localisation', category: 'government', image: '/assets/images/climate-mangroves.jpg', fit: 'cover', pos: 'center 50%', alt: 'Immersive mangrove projection for the Ministry of Climate Change and Environment', size: 'large' },
+  // PLACEHOLDER sector lines from here down — replace with the real scope.
+  { title: 'TAQA', sector: 'Events · Brand activation', category: 'government', image: '/assets/images/taqa.jpg', fit: 'cover', pos: 'center 50%', alt: 'TAQA outdoor event stage', size: 'large' },
+  { title: 'Mitsubishi', sector: 'Automotive · Social', category: 'automotive', image: '/assets/images/mitsubishi.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mitsubishi SUV on a Dubai overpass at dusk', size: 'small' },
+  { title: 'Bioderma', sector: 'Consumer health · Social', category: 'lifestyle', image: '/assets/images/bioderma.jpg', fit: 'cover', pos: 'center 40%', alt: 'Bioderma Photoderm sun care campaign', size: 'small' },
+  { title: 'Omnipod', sector: 'Healthcare · Lifestyle', category: 'lifestyle', image: '/assets/images/omnipod.jpg', fit: 'cover', pos: 'center 45%', alt: 'Omnipod family lifestyle campaign', size: 'small' },
+  { title: 'SEE Institute', sector: 'Events · Institutional', category: 'government', image: '/assets/images/see-institute.jpg', fit: 'cover', pos: 'center 45%', alt: 'SEE Institute conference auditorium', size: 'small' },
 ];
 
 const FILTERS = [
@@ -93,7 +105,9 @@ export default function WorkBody() {
       animation: nonce
         ? (nonce % 2 ? 'pop' : 'popAlt') + ' .5s cubic-bezier(.2,.8,.2,1) ' + Math.min(i * 0.045, 0.36).toFixed(3) + 's backwards'
         : 'none',
-      transition: 'opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .35s ease',
+      transition:
+        'opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1), border-color .35s ease, box-shadow .35s ease,' +
+        FLIP_EASE,
     },
   }));
 
@@ -215,12 +229,14 @@ export default function WorkBody() {
                 role="img"
                 ref={addReveal}
                 data-card=""
+                data-sheen=""
                 aria-label={p.alt}
                 className={`r-tall ${sx({ hover: 'transform:translateY(-6px);border-color:rgba(239,35,41,0.6);box-shadow:0 26px 64px rgba(0,0,0,0.6)' })}`}
                 style={p.cardStyle}
               >
                 <div data-zoom="" style={p.mediaStyle} />
                 <div
+                  data-scrim=""
                   style={{
                     position: 'absolute',
                     inset: 0,

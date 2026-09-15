@@ -3,6 +3,7 @@
 import { useChrome } from '../_chrome/chrome-context';
 import SiteLink from '../_chrome/SiteLink';
 import { sx } from '../pseudo';
+import { FLIP_EASE } from '../_chrome/motion';
 
 const CONTAINER = { width: 'min(calc(100% - 3rem),1440px)', margin: 'auto' };
 
@@ -275,7 +276,7 @@ export default function ServicesBody() {
               </div>
             );
             const media = (
-              <div key="media" style={MEDIA}>
+              <div key="media" data-sheen="" style={MEDIA}>
                 <img src={p.image} alt={p.alt} data-zoom="" style={MEDIA_IMG} />
               </div>
             );
@@ -289,7 +290,8 @@ export default function ServicesBody() {
                   opacity: 0,
                   transform: 'translateY(28px)',
                   transition:
-                    'opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1),border-color .35s ease,box-shadow .35s ease',
+                    'opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1),border-color .35s ease,box-shadow .35s ease,' +
+                    FLIP_EASE,
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
                   borderRadius: '22px',

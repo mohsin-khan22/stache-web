@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import SiteShell from './SiteShell';
 import { HERO_SLIDES } from '../hero-slides';
 
@@ -17,20 +17,26 @@ const PAGES = {
 /**
  * Sits in the root layout so the chrome survives client-side navigation.
  *
- * That placement is the whole point: SiteShell mounts once per document, so the
- * preloader runs on first load and on refresh, but not when moving between
- * routes. If the shell were rendered per page instead, every navigation would
- * remount it and replay the 1.3s preloader gate — which is what a full page
- * load used to do.
+ * That placement is still the point: SiteShell mounts once per document, so the
+ * preloader's timers, the reveal observer and the scroll listener are set up a
+ * single time. The preloader itself no longer runs only on first load — the
+ * shell replays it whenever `pathname` changes, so a link click looks like the
+ * full page load it used to be, without paying for one.
  *
- * A class component cannot call hooks, so the pathname is read here and handed
- * down as a prop.
+ * A class component cannot call hooks, so the pathname and the router are read
+ * here and handed down as props.
  */
 export default function RouteShell({ children }) {
   const pathname = usePathname();
+  const router = useRouter();
   const page = PAGES[pathname] ?? null;
   return (
-    <SiteShell page={page} heroSlides={page === 'home' ? HERO_SLIDES : null}>
+    <SiteShell
+      page={page}
+      pathname={pathname}
+      navigate={router.push}
+      heroSlides={page === 'home' ? HERO_SLIDES : null}
+    >
       {children}
     </SiteShell>
   );

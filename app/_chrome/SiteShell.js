@@ -7,6 +7,21 @@ import MobileNav from './MobileNav';
 import Footer from './Footer';
 import { ChromeContext } from './chrome-context';
 
+// The preloader's timeline, in one place because the cold load and the
+// route-to-route replay share it — a link click has to reach the same first
+// frame a hard reload does: full red, moustache already in the middle, no wipe
+// and no fade leading into it.
+//   SWAP_MS   the beat between painting that frame and committing the new
+//             route, so the panel is up before the page underneath changes.
+//   MARK_MS   how long the moustache holds in the middle before it flies.
+//   MIN_MS    the floor on the whole gate, so a cached page still reads as a
+//             load rather than a flicker.
+//   MAX_MS    the ceiling, in case an asset never settles.
+const SWAP_MS = 60;
+const MARK_MS = 380;
+const MIN_MS = 1300;
+const MAX_MS = 2800;
+
 /**
  * The chrome every page shared in the bundle: preloader, scroll progress,
  * header, mobile nav, footer, and the reveal observer.
@@ -25,10 +40,111 @@ import { ChromeContext } from './chrome-context';
  *     render, which a static export would otherwise fail on.
  */
 export default class SiteShell extends Component {
-  state = { pct: 0, y: 0, navOpen: false, scrolled: false, loaded: false };
+  state = {
+    pct: 0,
+    y: 0,
+    navOpen: false,
+    scrolled: false,
+    loaded: false,
+    // Rewind the preloader in this commit with every transition switched off.
+    // A document load starts on the red frame; a link click has to arrive at it
+    // the same way, rather than fading the panel up or flying the moustache
+    // backwards out of the header it just landed in.
+    instant: false,
+  };
   revealEls = [];
 
   toggleNav = () => this.setState((st) => ({ navOpen: !st.navOpen }));
+
+  /**
+   * A link asked for another route. Put the preloader up on the spot — the same
+   * frame a hard reload paints — and push the route a beat later, so the page
+   * swaps behind a panel that is already solid.
+   *
+   * Answers whether the click was taken over. False means the caller should let
+   * next/link navigate on its own: no router, or the route is already on
+   * screen, in which case replaying a full load for the page the visitor is
+   * looking at would be noise.
+   */
+  beginTransition = (href) => {
+    if (typeof this.props.navigate !== 'function') return false;
+    if (href === this.props.pathname) return false;
+
+    // A second click before the push retargets it rather than starting over:
+    // the preloader is already on screen and its timeline is already running.
+    clearTimeout(this._swapTimer);
+    clearTimeout(this._navFailsafe);
+    this._navPending = true;
+    this._swapTimer = setTimeout(() => this.props.navigate(href), SWAP_MS);
+    // If the route never arrives, un-stick the panel rather than leaving the
+    // visitor on a red screen.
+    this._navFailsafe = setTimeout(() => {
+      if (this._navPending) this.replayPreloader();
+    }, SWAP_MS + 5000);
+
+    // `instant` stays on until the route commits, where replayPreloader takes
+    // over — nothing here should animate, it should simply be the first frame.
+    this.setState({
+      instant: true,
+      markOut: false,
+      markFlip: null,
+      logoFlip: null,
+      loaded: false,
+      contentReady: false,
+      navOpen: false,
+    });
+    return true;
+  };
+
+  /**
+   * The route changed and its body is committed. Run the same sequence a cold
+   * load runs: hold the moustache, fly it into the wordmark, then lift the
+   * panel once the page's own assets have settled.
+   */
+  replayPreloader = () => {
+    this._navPending = false;
+    this._revealed = false;
+    this._revealOpen = false;
+    this._revealQueue = [];
+    clearTimeout(this._swapTimer);
+    clearTimeout(this._navFailsafe);
+    clearTimeout(this._markTimer);
+    clearTimeout(this._minTimer);
+    clearTimeout(this._maxTimer);
+    clearTimeout(this._revealTimer);
+
+    // Rewind with the transitions off either way. After a link click the panel
+    // is already red and this changes nothing on screen; after a back/forward
+    // press, which arrives with no warning, it is what puts the red frame up
+    // rather than fading into it.
+    this.setState({
+      instant: true,
+      markOut: false,
+      markFlip: null,
+      logoFlip: null,
+      loaded: false,
+      contentReady: false,
+      // The new route starts at the top; the scroll listener only fires once
+      // the browser gets there, and until then the header would keep the
+      // outgoing page's condensed state.
+      pct: 0,
+      y: 0,
+      scrolled: false,
+    });
+    // Hand the transitions back on the next frame, in time for the flight at
+    // MARK_MS and the panel's fade-out at the end. Nothing moves when it lifts:
+    // every value it was holding still is the value the animated styles resolve
+    // to at rest.
+    requestAnimationFrame(() => {
+      if (this.state.instant) this.setState({ instant: false });
+    });
+
+    this._markTimer = setTimeout(
+      () => this.setState({ markFlip: this.measureMarkFlip(), markOut: true }),
+      MARK_MS,
+    );
+    this._startReveal();
+  };
 
   addReveal = (el) => {
     if (el && !this.revealEls.includes(el)) {
@@ -38,13 +154,63 @@ export default class SiteShell extends Component {
     }
   };
 
+  /**
+   * Nothing reveals while the preloader still covers the page.
+   *
+   * The observer fires within a frame of mount, but the panel does not start
+   * lifting for another three seconds, so without this gate the whole first
+   * screen enters — and finishes — behind the red. Measured on Home before it
+   * existed: the hero heading was at full opacity by 1870ms, the panel began
+   * clearing at 2996ms. Every one of those animations was paid for and none of
+   * them was ever seen.
+   *
+   * Below-the-fold elements are unaffected: by the time they are scrolled to,
+   * the gate is long open and they reveal on arrival as before.
+   */
+  _revealOpen = false;
+  _revealQueue = [];
+
+  openRevealGate = () => {
+    if (this._revealOpen) return;
+    this._revealOpen = true;
+    const queued = this._revealQueue;
+    this._revealQueue = [];
+    // Flushed in one pass: each element already carries the stagger the mount
+    // pass wrote onto it as a transitionDelay, and spacing them again here
+    // would apply that delay twice.
+    queued.forEach((el) => this.showReveal(el));
+  };
+
   showReveal = (el) => {
+    if (!this._revealOpen) {
+      if (!this._revealQueue.includes(el)) this._revealQueue.push(el);
+      return;
+    }
+    // motion.css keys every entrance off this — the heading wiping up, the
+    // picture settling out of its over-zoom, the badge swinging in. CSS has no
+    // way to ask whether the observer has reached an element, so the observer
+    // says so.
+    if (el.setAttribute) el.setAttribute('data-revealed', '');
     if (el.hasAttribute && el.hasAttribute('data-rule')) {
       el.style.transform = 'scaleX(1)';
       return;
     }
     el.style.opacity = '1';
     el.style.transform = 'none';
+    if (el.hasAttribute && el.hasAttribute('data-turn')) this.playTurn(el);
+  };
+
+  /**
+   * Restart the turn on a [data-turn] panel.
+   *
+   * Taking the attribute off, reading a layout property, then putting it back
+   * is what makes the keyframe run again: without the read in the middle the
+   * browser coalesces the two changes, sees no difference, and nothing plays.
+   */
+  playTurn = (el) => {
+    el.removeAttribute('data-turning');
+    void el.offsetWidth;
+    el.setAttribute('data-turning', '');
   };
 
   // The preloader waits on the wordmark, plus the first hero slide on pages
@@ -59,8 +225,6 @@ export default class SiteShell extends Component {
   };
 
   _startReveal = () => {
-    const MIN_MS = 1300;
-    const MAX_MS = 2800;
     const urls = this._revealAssets();
     const settled = {};
     let pending = urls.length;
@@ -73,6 +237,7 @@ export default class SiteShell extends Component {
       this.setState({ contentReady: true });
       this._revealTimer = setTimeout(() => {
         this.setState({ logoFlip: this.measureLogoFlip(), loaded: true });
+        this.openRevealGate();
       }, 260);
     };
     urls.forEach((u, i) => {
@@ -129,6 +294,15 @@ export default class SiteShell extends Component {
       position: 'fixed', inset: 0, width: '100%', height: '100%',
       zIndex: 10000, pointerEvents: 'none', willChange: 'transform, opacity',
     };
+    if (this.state.instant) {
+      // Back in the middle at full strength with nothing to watch: without this
+      // the moustache would fly backwards out of the header slot it just landed
+      // in, over 0.78s, every time a link is clicked.
+      base.transform = 'none';
+      base.opacity = 1;
+      base.transition = 'none';
+      return base;
+    }
     if (!out) {
       base.transform = 'none';
       base.opacity = 1;
@@ -151,7 +325,10 @@ export default class SiteShell extends Component {
 
   markPathStyle = () => ({
     fill: this.state.markOut ? '#0a0e1a' : '#f2eee5',
-    transition: 'fill 0.34s ease 0.42s',
+    // Cream again at once on a rewind: the delayed fill transition would
+    // otherwise open the next page on a moustache still on its way back from
+    // the dark it turns as it flies.
+    transition: this.state.instant ? 'none' : 'fill 0.34s ease 0.42s',
   });
 
   measureLogoFlip = () => {
@@ -187,9 +364,14 @@ export default class SiteShell extends Component {
       zIndex: 9999, pointerEvents: 'none',
       transform: t,
       opacity: done ? 0 : (shown ? 1 : 0),
-      transition: done
-        ? 'transform 1.05s cubic-bezier(.62,0,.2,1), opacity 0.42s ease 0.68s'
-        : 'opacity 0.5s cubic-bezier(.4,0,.2,1) 0.22s',
+      // On a rewind the wordmark is back in the middle and invisible, waiting
+      // for the moustache to hand over to it — with no trace of the flip into
+      // the header that ended the last page.
+      transition: this.state.instant
+        ? 'none'
+        : done
+          ? 'transform 1.05s cubic-bezier(.62,0,.2,1), opacity 0.42s ease 0.68s'
+          : 'opacity 0.5s cubic-bezier(.4,0,.2,1) 0.22s',
       willChange: 'transform, opacity',
     };
   };
@@ -214,14 +396,17 @@ export default class SiteShell extends Component {
     };
     window.addEventListener('scroll', this._onScroll);
     this._reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-    this._markTimer = setTimeout(() => this.setState({ markFlip: this.measureMarkFlip(), markOut: true }), 380);
+    this._markTimer = setTimeout(() => this.setState({ markFlip: this.measureMarkFlip(), markOut: true }), MARK_MS);
     this._startReveal();
     this._io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          this.showReveal(entry.target);
-          this._io.unobserve(entry.target);
-        }
+        if (!entry.isIntersecting) return;
+        this.showReveal(entry.target);
+        // A turning panel stays observed: its whole point is to come over the
+        // top every time the section is scrolled back to, so it must be able
+        // to intersect again. Everything else has had its one entrance.
+        if (entry.target.hasAttribute && entry.target.hasAttribute('data-turn')) return;
+        this._io.unobserve(entry.target);
       });
     }, { threshold: 0.01, rootMargin: '0px 0px -10% 0px' });
     requestAnimationFrame(() => {
@@ -246,7 +431,13 @@ export default class SiteShell extends Component {
   }
 
   componentDidUpdate(prev) {
-    if (prev.page === this.props.page) return;
+    if (prev.pathname === this.props.pathname) return;
+
+    // The new body is committed and measurable, so the preloader can be replayed
+    // against it — the header logo it flies into and the hero image it waits on
+    // are both the new page's.
+    this.replayPreloader();
+
     // Client-side navigation replaced the page body while the shell stayed
     // mounted. Drop the elements that left with the old page, then give the new
     // ones their stagger — addReveal has already registered and observed them
@@ -272,6 +463,8 @@ export default class SiteShell extends Component {
     clearTimeout(this._maxTimer);
     clearTimeout(this._revealTimer);
     clearTimeout(this._markTimer);
+    clearTimeout(this._swapTimer);
+    clearTimeout(this._navFailsafe);
     clearTimeout(this._fallback);
     if (this._io) this._io.disconnect();
   }
@@ -306,7 +499,11 @@ export default class SiteShell extends Component {
         position: 'fixed', inset: 0, background: '#ef2329', zIndex: 9998,
         display: 'grid', placeItems: 'center',
         opacity: this.state.loaded ? 0 : 1,
-        transition: 'opacity 0.95s cubic-bezier(.4,0,.2,1)',
+        // The red arrives, it never fades in — a reload has no frame to fade
+        // from and neither should a click. Only the lift at the end animates.
+        transition: this.state.instant ? 'none' : 'opacity 0.95s cubic-bezier(.4,0,.2,1)',
+        // Up on screen, the panel eats clicks — including a second one on the
+        // link that started the transition.
         pointerEvents: this.state.loaded ? 'none' : 'auto',
         willChange: 'opacity',
       },
@@ -332,29 +529,33 @@ export default class SiteShell extends Component {
       addReveal: this.addReveal,
       heroCopyParallax: this.heroCopyParallax,
       scrollY: this.state.y,
+      beginTransition: this.beginTransition,
     };
+    // The provider wraps the whole shell rather than just <main>, because the
+    // header, the mobile nav and the footer all render SiteLinks and every one
+    // of them has to be able to start the transition.
     return (
       <div id="dc-root">
-        <div className="sc-host">
-          <Preloader
-            panelStyle={v.preloaderStyle}
-            logoStyle={v.preloaderLogoStyle}
-            markStyle={v.preloaderMarkStyle}
-            markPathStyle={v.preloaderMarkPathStyle}
-          />
-          <div style={v.progressStyle} aria-hidden="true" />
-          <Header
-            page={this.props.page}
-            headerStyle={v.headerStyle}
-            menuIcon={v.menuIcon}
-            onToggleNav={this.toggleNav}
-          />
-          <MobileNav style={v.mobileNavStyle} />
-          <main style={v.mainStyle}>
-            <ChromeContext.Provider value={chrome}>{this.props.children}</ChromeContext.Provider>
-          </main>
-          <Footer />
-        </div>
+        <ChromeContext.Provider value={chrome}>
+          <div className="sc-host">
+            <Preloader
+              panelStyle={v.preloaderStyle}
+              logoStyle={v.preloaderLogoStyle}
+              markStyle={v.preloaderMarkStyle}
+              markPathStyle={v.preloaderMarkPathStyle}
+            />
+            <div style={v.progressStyle} aria-hidden="true" />
+            <Header
+              page={this.props.page}
+              headerStyle={v.headerStyle}
+              menuIcon={v.menuIcon}
+              onToggleNav={this.toggleNav}
+            />
+            <MobileNav style={v.mobileNavStyle} />
+            <main style={v.mainStyle}>{this.props.children}</main>
+            <Footer />
+          </div>
+        </ChromeContext.Provider>
       </div>
     );
   }

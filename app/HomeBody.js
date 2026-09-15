@@ -4,6 +4,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { useChrome } from './_chrome/chrome-context';
 import SiteLink from './_chrome/SiteLink';
 import { sx } from './pseudo';
+import { FLIP_EASE } from './_chrome/motion';
 import { HERO_DURATION, HERO_SLIDES } from './hero-slides';
 
 const CONTAINER = { width: 'min(calc(100% - 3rem),1440px)', margin: 'auto' };
@@ -174,44 +175,36 @@ const PROJECTS = [
   {
     span: 4,
     delay: '',
-    src: '/assets/images/01_DHA_brain.jpg',
-    alt: 'Dubai Health Authority campaign visual',
-    imgStyle: { objectPosition: '50% 44%', filter: 'saturate(1.0) contrast(1.02)' },
+    src: '/assets/images/nsti-festival.jpg',
+    alt: 'NSTI Festival virtual reality experience',
+    imgStyle: { objectPosition: '50% 45%', filter: 'saturate(1.02) contrast(1.02)' },
     sector: 'Government & public sector',
-    title: 'Dubai Health Authority',
+    title: 'NSTI Festival',
   },
   {
     span: 8,
     delay: ' .1s',
-    src: '/assets/images/02_DET_dubai_dinner.jpg',
-    alt: 'Dubai Economy and Tourism dinner event',
-    imgStyle: { objectPosition: '50% 45%', filter: 'saturate(0.9) contrast(1.04) brightness(0.94)' },
-    sector: 'Brand transition',
-    title: 'DET',
-  },
-  {
-    span: 4,
-    delay: '',
-    src: '/assets/images/03_MercedesBenz_red.jpg',
-    alt: 'Mercedes-Benz campaign visual',
-    imgStyle: {
-      objectFit: 'contain',
-      objectPosition: 'center bottom',
-      top: '22px',
-      bottom: '78px',
-      height: 'auto',
-      background: 'radial-gradient(circle at 50% 42%,rgba(239,35,41,0.22),transparent 62%)',
-      filter: 'saturate(1.02) contrast(1.02)',
-    },
+    src: '/assets/images/mercedes-benz.jpg',
+    alt: 'Mercedes-Benz GLE at night on a Dubai highway',
+    imgStyle: { objectPosition: '50% 55%', filter: 'saturate(0.98) contrast(1.04) brightness(0.96)' },
     sector: 'Automotive',
     title: 'Mercedes-Benz',
   },
   {
+    span: 4,
+    delay: '',
+    src: '/assets/images/climate-mangroves.jpg',
+    alt: 'Immersive mangrove projection for the Ministry of Climate Change and Environment',
+    imgStyle: { objectPosition: '50% 50%', filter: 'saturate(1) contrast(1.03)' },
+    sector: 'Sustainability',
+    title: 'Climate Change & Environment',
+  },
+  {
     span: 8,
     delay: ' .1s',
-    src: '/assets/images/04_Talabat_Ronaldo.jpg',
-    alt: 'Talabat campaign featuring Cristiano Ronaldo',
-    imgStyle: { objectPosition: '50% 40%', filter: 'saturate(0.9) contrast(1.04) brightness(0.94)' },
+    src: '/assets/images/talabat.jpg',
+    alt: 'Talabat gaming campaign',
+    imgStyle: { objectPosition: '50% 45%', filter: 'saturate(0.95) contrast(1.03) brightness(0.96)' },
     sector: 'Lifestyle & F&B',
     title: 'Talabat',
   },
@@ -631,8 +624,16 @@ export default function HomeBody() {
           <div
             ref={addReveal}
             className="r-tall"
+            data-turn="self"
             style={{
               ...REVEAL,
+              // The fade is cut to .4s rather than REVEAL's .8s so the card is
+              // solid well before it comes over the top. On the shared timing
+              // it was still at 5% opacity while upside down, which meant the
+              // half of the move worth watching happened on an invisible card.
+              // The turn itself is a keyframe in motion.css and needs nothing
+              // from this list.
+              transition: 'opacity .4s ease,transform .8s cubic-bezier(.2,.8,.2,1)',
               padding: '2.5rem',
               borderRadius: '22px',
               background: '#ef2329',
@@ -754,6 +755,7 @@ export default function HomeBody() {
           <div
             ref={addReveal}
             className="r-5up"
+            data-turn="children"
             style={{
               opacity: 0,
               transform: 'translateY(28px)',
@@ -862,6 +864,7 @@ export default function HomeBody() {
               <article
                 key={s.n}
                 ref={addReveal}
+                data-card=""
                 className={sx({
                   hover: 'border-color:rgba(239,35,41,0.8);transform:translateY(-8px) scale(1.012);box-shadow:0 24px 60px rgba(0,0,0,0.55);--is:1.08',
                 })}
@@ -880,7 +883,7 @@ export default function HomeBody() {
                   flexDirection: 'column',
                   gap: '2rem',
                   // the original repeats `transition` here; the later value wins
-                  ...{ transition: '0.35s ease' },
+                  ...{ transition: '0.35s ease,' + FLIP_EASE },
                 }}
               >
                 <span
@@ -991,6 +994,8 @@ export default function HomeBody() {
                 key={p.title}
                 href="/work"
                 ref={addReveal}
+                data-card=""
+                data-sheen=""
                 className={`r-tall ${sx({ hover: 'transform:translateY(-6px) scale(1.008);border-color:rgba(239,35,41,0.6);box-shadow:0 26px 64px rgba(0,0,0,0.6)' })}`}
                 style={{
                   opacity: 0,
@@ -1004,7 +1009,7 @@ export default function HomeBody() {
                   background: '#111',
                   border: '1px solid rgba(255,255,255,0.14)',
                   // the original repeats `transition` here; the later value wins
-                  ...{ transition: '0.35s ease' },
+                  ...{ transition: '0.35s ease,' + FLIP_EASE },
                 }}
               >
                 <img
@@ -1021,7 +1026,7 @@ export default function HomeBody() {
                     ...p.imgStyle,
                   }}
                 />
-                <div style={CARD_SHELL} />
+                <div data-scrim="" style={CARD_SHELL} />
                 <div style={CARD_FOOT}>
                   <div>
                     <span

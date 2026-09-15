@@ -2,6 +2,7 @@
 
 import { useChrome } from '../_chrome/chrome-context';
 import SiteLink from '../_chrome/SiteLink';
+import { FLIP_EASE } from '../_chrome/motion';
 import { sx } from '../pseudo';
 
 const CONTAINER = { width: 'min(calc(100% - 3rem),1440px)', margin: 'auto' };
@@ -205,7 +206,15 @@ export default function AboutBody() {
           <div
             ref={addReveal}
             data-media=""
-            style={{ ...REVEAL, height: '600px', borderRadius: '22px', overflow: 'hidden', position: 'relative' }}
+            data-sheen=""
+            style={{
+              ...REVEAL,
+              transition: REVEAL.transition + ',' + FLIP_EASE,
+              height: '600px',
+              borderRadius: '22px',
+              overflow: 'hidden',
+              position: 'relative',
+            }}
           >
             <img
               src="/assets/images/about-founder-ahmed-rezk.jpg"
@@ -214,6 +223,7 @@ export default function AboutBody() {
               style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
             />
             <div
+              data-scrim=""
               style={{
                 position: 'absolute',
                 inset: 0,

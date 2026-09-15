@@ -1,6 +1,7 @@
-// Plain <a> hrefs, not next/link: every navigation on the bundled site is a
-// full document load, which is what replays the preloader on each page. Client
-// transitions would show it once and quietly change the experience.
+// Every navigation on the bundled site was a full document load, which is what
+// replayed the preloader on each page. These hrefs go through SiteLink, which
+// keeps that experience — clicking one lands on the preloader's first frame and
+// runs it out in full — without re-downloading the document.
 export const NAV = [
   { page: 'home', href: '/', label: 'Home' },
   { page: 'work', href: '/work', label: 'Work' },
