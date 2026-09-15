@@ -43,7 +43,6 @@ body{margin:0;background:#050505;color:#f2eee5;font-family:Inter,system-ui,-appl
   @media (max-width:560px){
     [style*="min-height: 440px"],[style*="min-height: 480px"]{min-height:340px !important}
   }
-  @keyframes marquee{to{transform:translateX(-50%)}}
   @keyframes float{50%{transform:translateY(-10px) rotate(3deg)}}
   [data-boldness]{font-size:min(6rem,22cqw) !important}
   /* hero background slideshow */
