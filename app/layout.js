@@ -9,7 +9,7 @@ export const metadata = {
     template: '%s — STACHE',
   },
   description:
-    'STACHE is a marketing and advertising agency where creative disruption meets calculated strategy — for brands that crave distinction, not just visibility.',
+    'STACHE is a Dubai-based marketing and advertising agency where creative disruption meets calculated strategy — for brands that crave distinction, not just visibility.',
 };
 
 export const viewport = {

@@ -59,7 +59,7 @@ const PILLARS = [
   {
     n: '01',
     title: 'Digital marketing management',
-    body: 'Full end-to-end brand management across content, community, campaigns, strategy, and performance.',
+    body: 'Full end-to-end brand management across content, community, campaigns, strategy, and performance — built for brands operating in Dubai and across the UAE.',
     tags: ['Content strategy', 'Social management', 'Community', 'Campaigns', 'Performance marketing'],
     image: '/assets/images/services-digital-marketing.jpg',
     alt: 'Digital marketing campaign visual',
@@ -76,7 +76,7 @@ const PILLARS = [
   {
     n: '02',
     title: 'Social consultancy',
-    body: 'We position brands, not just post content. Voice, audience, messaging, channel role, and goals are aligned into one coherent system.',
+    body: 'We position brands, not just post content. Voice, audience, messaging, channel role, and goals are aligned into one coherent social media strategy for Dubai-based and regional brands.',
     tags: ['Positioning', 'Brand voice', 'Audience strategy', 'Channel planning', 'Governance'],
     image: '/assets/images/services-brand-strategy.jpg',
     alt: 'Dubai brand strategy campaign',
@@ -92,7 +92,7 @@ const PILLARS = [
   {
     n: '03',
     title: 'Conceptual project execution',
-    body: 'We bring big ideas to life through campaigns, activations, video production, event execution, podcast production, and immersive experiences.',
+    body: 'We bring big ideas to life through campaigns, activations, video production, event execution, podcast production, and immersive experiences across Dubai and the wider UAE.',
     tags: ['Concept development', 'Activations', 'Events', 'Video production', 'Immersive design'],
     image: '/assets/images/services-nsti-immersive.jpg',
     alt: 'NSTI Festival immersive technology campaign',
@@ -181,7 +181,8 @@ export default function ServicesBody() {
               marginTop: '1.5rem',
             }}
           >
-            Three integrated service pillars, one uncompromising standard of execution.
+            Three integrated service pillars — digital marketing, social consultancy, and conceptual execution — one
+            uncompromising standard of execution, built for brands across Dubai and the UAE.
           </p>
         </div>
         <div

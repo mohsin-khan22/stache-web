@@ -9,16 +9,12 @@ import { FLIP_EASE } from '../_chrome/motion';
 // Nine covers supplied by the client, replacing the imagery the bundle shipped
 // with. Sizes tile the 12-column grid exactly: 8+4, 4+8, 8+4, then three 4s.
 //
-// The four that carried over — Mercedes-Benz, Talabat, NSTI and Climate Change
-// — keep the sector lines they already had. The five new brands have PLACEHOLDER
-// sector lines, marked below: they describe what is visible in the cover, not
-// what the engagement actually was, and want replacing with the real scope.
+// Sector lines on all nine are confirmed by the client's work-page copy.
 const PROJECTS = [
   { title: 'Mercedes-Benz', sector: 'Social · Performance · Video', category: 'automotive', image: '/assets/images/mercedes-benz.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mercedes-Benz GLE at night on a Dubai highway', size: 'large' },
   { title: 'Talabat', sector: 'Video · Social content', category: 'lifestyle', image: '/assets/images/talabat.jpg', fit: 'cover', pos: 'center 45%', alt: 'Talabat gaming campaign', size: 'small' },
   { title: 'NSTI Festival', sector: 'Launch · Social · Performance', category: 'government', image: '/assets/images/nsti-festival.jpg', fit: 'cover', pos: 'center 45%', alt: 'NSTI Festival virtual reality experience', size: 'small' },
   { title: 'Climate Change & Environment', sector: 'Immersive video · Localisation', category: 'government', image: '/assets/images/climate-mangroves.jpg', fit: 'cover', pos: 'center 50%', alt: 'Immersive mangrove projection for the Ministry of Climate Change and Environment', size: 'large' },
-  // PLACEHOLDER sector lines from here down — replace with the real scope.
   { title: 'TAQA', sector: 'Events · Brand activation', category: 'government', image: '/assets/images/taqa.jpg', fit: 'cover', pos: 'center 50%', alt: 'TAQA outdoor event stage', size: 'large' },
   { title: 'Mitsubishi', sector: 'Automotive · Social', category: 'automotive', image: '/assets/images/mitsubishi.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mitsubishi SUV on a Dubai overpass at dusk', size: 'small' },
   { title: 'Bioderma', sector: 'Consumer health · Social', category: 'lifestyle', image: '/assets/images/bioderma.jpg', fit: 'cover', pos: 'center 40%', alt: 'Bioderma Photoderm sun care campaign', size: 'small' },

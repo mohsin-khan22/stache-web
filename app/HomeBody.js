@@ -55,7 +55,7 @@ const CARD_HOVER =
 const PRINCIPLES = [
   {
     title: 'Intentional impact',
-    body: 'Every idea, post, campaign and pixel begins with a business objective. We map the audience, the message and the moment before we make anything, then measure what moved so creative earns its budget.',
+    body: 'Every idea, post, campaign, and pixel begins with a business objective. We map the audience, the message, and the moment before we create anything — then measure what moved, so creative earns its budget.',
     dark: true,
     icon: (
       <>
@@ -67,7 +67,7 @@ const PRINCIPLES = [
   },
   {
     title: 'Authenticity always',
-    body: 'We build brands that sound like themselves. Rather than chase whatever is trending this week, we sharpen the story you already own and repeat it with the discipline that makes an audience recognise you.',
+    body: "We build brands that sound like themselves. Instead of chasing this week's trend, we sharpen the story you already own and repeat it with the discipline that makes an audience recognize you.",
     dark: false,
     icon: (
       <>
@@ -78,13 +78,13 @@ const PRINCIPLES = [
   },
   {
     title: 'Fearless creativity',
-    body: 'Safe work gets scrolled past. We push concepts further than expected, pressure-test them against the brief and ship the version that makes people stop, feel something and remember who said it.',
+    body: 'Safe work gets scrolled past. We push concepts further than expected, pressure-test them against the brief, and ship the version that makes people stop, feel something, and remember who said it.',
     dark: true,
     icon: <path d="M20 6v28M6 20h28M10.5 10.5l19 19M29.5 10.5l-19 19" />,
   },
   {
     title: 'Momentum over comfort',
-    body: 'Markets here move weekly, so we do too. We publish, read the data and adjust while the campaign is still live, keeping your brand a step ahead of its category instead of politely in line with it.',
+    body: "Dubai's market moves weekly, so we do too. We publish, read the data, and adjust while the campaign is still live — keeping your brand a step ahead of its category instead of politely in line with it.",
     dark: false,
     icon: (
       <>
@@ -95,7 +95,7 @@ const PRINCIPLES = [
   },
   {
     title: 'Together, louder',
-    body: 'The strongest work comes from teams that argue well. We embed with your marketing, sales and leadership, keep the thinking in the open and treat every result as something we own together.',
+    body: 'The strongest work comes from teams that argue well. We embed with your marketing, sales, and leadership teams, keep the thinking in the open, and treat every result as something we own together.',
     dark: true,
     icon: (
       <>
@@ -111,6 +111,7 @@ const SERVICES = [
     n: '01',
     title: 'Digital marketing management',
     tags: ['Content', 'Community', 'Campaigns', 'Strategy'],
+    body: "Full end-to-end brand management — content, community, and campaigns handled by a team that treats your account like it's ours.",
     delay: '',
     icon: (
       <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#fff" strokeWidth="2.5">
@@ -124,6 +125,7 @@ const SERVICES = [
     n: '02',
     title: 'Social consultancy',
     tags: ['Positioning', 'Voice', 'Audience', 'Growth'],
+    body: 'We position brands, not just post content — aligning voice, audience, and growth goals into one clear social strategy.',
     delay: ' .1s',
     icon: (
       <svg viewBox="0 0 48 48" width="26" height="26" fill="none" stroke="#fff" strokeWidth="2.5">
@@ -136,6 +138,7 @@ const SERVICES = [
     n: '03',
     title: 'Conceptual project execution',
     tags: ['Campaigns', 'Activations', 'Experiences', 'Production'],
+    body: 'Big ideas, brought to life through campaigns, activations, and immersive experiences built to be felt, not just seen.',
     delay: ' .2s',
     icon: (
       <svg viewBox="0 0 48 48" width="24" height="24" fill="none" stroke="#fff" strokeWidth="2.5">
@@ -502,8 +505,8 @@ export default function HomeBody() {
                   textShadow: '0 2px 18px rgba(0,0,0,0.65)',
                 }}
               >
-                STACHE is a marketing and advertising agency where creative disruption meets calculated strategy — for
-                brands that crave distinction, not just visibility.
+                STACHE is a Dubai-based marketing and advertising agency where creative disruption meets calculated
+                strategy — for brands that crave distinction, not just visibility.
               </p>
               <SiteLink
                 href="/work"
@@ -525,7 +528,7 @@ export default function HomeBody() {
                 }}
                 className={sx({ hover: 'background:#fff;border-color:#fff;color:#ef2329;transform:translateY(-2px)' })}
               >
-                Explore the work <span data-arrow="">↗</span>
+                See our work <span data-arrow="">↗</span>
               </SiteLink>
             </div>
           </div>
@@ -598,7 +601,7 @@ export default function HomeBody() {
               <span
                 style={{ fontSize: '0.72rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 900 }}
               >
-                01 · Who are we
+                01 · Who we are
               </span>
             </div>
             <h2
@@ -673,8 +676,8 @@ export default function HomeBody() {
                 margin: '1.5rem 0',
               }}
             >
-              We specialize in digital marketing management, social consultancy, and conceptual project execution. Every
-              idea, post, campaign, and pixel is backed by intent.
+              As a full-service marketing agency in Dubai, we specialize in digital marketing management, social media
+              consultancy, and conceptual project execution. Every idea, post, campaign, and pixel is backed by intent.
             </p>
             <SiteLink
               href="/about"
@@ -869,8 +872,8 @@ export default function HomeBody() {
                 margin: 0,
               }}
             >
-              From always-on digital management to immersive activations, we align voice, audience, and business goals —
-              then execute without compromise.
+              From always-on digital marketing management to immersive brand activations, we align voice, audience, and
+              business goals — then execute without compromise across Dubai and the wider UAE.
             </p>
           </div>
           <div className="r-3up" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: '1.5rem' }}>
@@ -947,6 +950,7 @@ export default function HomeBody() {
                   >
                     {s.title}
                   </h3>
+                  <p style={{ fontSize: '0.95rem', lineHeight: 1.5, color: '#bdbdbd', margin: '0 0 1.5rem' }}>{s.body}</p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.55rem' }}>
                     {s.tags.map((t) => (
                       <span key={t} style={PILL}>
@@ -999,7 +1003,8 @@ export default function HomeBody() {
                 margin: 0,
               }}
             >
-              Across government, automotive, lifestyle, food and beverage, education, and sustainability.
+              From government to automotive, lifestyle, F&amp;B, education, and sustainability — see how a Dubai marketing
+              agency turns strategy into work that performs.
             </p>
           </div>
           <div className="r-12col" style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: '1.4rem' }}>
@@ -1136,7 +1141,8 @@ export default function HomeBody() {
               }}
             >
               <p style={{ maxWidth: '530px', fontSize: '1.15rem', margin: 0, color: '#fff' }}>
-                Bring us the ambition. We will bring the strategy, creative force, and executional discipline.
+                Bring us the ambition. We&apos;ll bring the strategy, creative force, and executional discipline to make it
+                happen.
               </p>
               <SiteLink
                 href="/contact"

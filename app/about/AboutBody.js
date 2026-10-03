@@ -170,8 +170,8 @@ export default function AboutBody() {
               marginTop: '1.5rem',
             }}
           >
-            We are an agency for brands that want distinction, momentum, and work that refuses to disappear into the
-            feed.
+            We are a Dubai marketing agency for brands that want distinction, momentum, and work that refuses to
+            disappear into the feed.
           </p>
         </div>
         <div
@@ -391,7 +391,8 @@ export default function AboutBody() {
               }}
             >
               <p style={{ maxWidth: '530px', fontSize: '1.15rem', margin: 0, color: '#fff' }}>
-                See how our strategy, creative, production, and campaign capabilities come together.
+                See how our strategy, creative, production, and campaign capabilities come together — the full picture
+                of a Dubai marketing and advertising agency built to execute.
               </p>
               <SiteLink
                 href="/services"
