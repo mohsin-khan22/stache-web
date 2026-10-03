@@ -63,7 +63,7 @@ export default function Header({ page, headerStyle, menuIcon, onToggleNav }) {
     <header style={headerStyle}>
       <div style={{ ...CONTAINER, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <SiteLink href="/" aria-label="STACHE home" style={{ width: '154px', position: 'relative', zIndex: 902 }}>
-          <img data-header-logo="" src="/logo.svg" alt="STACHE" style={{ display: 'block', width: '100%' }} />
+          <img data-header-logo="" src="/logo-header.svg" alt="STACHE" style={{ display: 'block', width: '100%' }} />
         </SiteLink>
         <nav aria-label="Primary navigation" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
           {NAV.map((item) =>

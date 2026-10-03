@@ -186,7 +186,7 @@ export default function AboutBody() {
             color: 'rgba(255,255,255,0.025)',
           }}
         >
-          02
+          04
         </div>
       </section>
 

@@ -194,7 +194,7 @@ export default function WorkBody() {
             color: 'rgba(255,255,255,0.025)',
           }}
         >
-          04
+          02
         </div>
       </section>
 

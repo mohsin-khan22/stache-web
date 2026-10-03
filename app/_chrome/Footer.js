@@ -52,7 +52,7 @@ export default function Footer() {
           style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr', gap: '3rem' }}
         >
           <div>
-            <img src="/logo.svg" alt="STACHE" style={{ width: '220px', marginBottom: '1.5rem' }} />
+            <img src="/logo-header.svg" alt="STACHE" style={{ width: '220px', marginBottom: '1.5rem' }} />
             <p style={{ color: '#a7a7a7' }}>
               Creative disruption meets calculated strategy. Built for brands that crave distinction — not just
               visibility.
