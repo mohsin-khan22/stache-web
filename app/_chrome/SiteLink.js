@@ -16,8 +16,7 @@ function isPlainClick(e) {
 /**
  * One link component for the whole site, because several places render internal
  * routes and outbound links from the same list — the footer's "Start a
- * conversation" column mixes /contact with a mailto: and two placeholder
- * anchors.
+ * conversation" column mixes /contact with mailto:, tel: and Instagram links.
  *
  * Internal routes get next/link, so the route swaps without a document load and
  * the chrome stays mounted. The click is then handed to the shell, which puts

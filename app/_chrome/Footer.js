@@ -25,9 +25,9 @@ const NAVIGATE = [
 
 const CONVERSATION = [
   ['/contact', 'Project enquiry'],
-  ['mailto:hello@stache.example', 'hello@stache.example'],
-  ['#', 'Instagram ↗'],
-  ['#', 'LinkedIn ↗'],
+  ['mailto:adam@stachedxb.com', 'adam@stachedxb.com'],
+  ['tel:+971559549447', '+971 55 954 9447'],
+  ['https://www.instagram.com/stachedxb/', 'Instagram ↗'],
 ];
 
 // Byte-identical across all five bundled pages, so it is built once here.
@@ -69,7 +69,13 @@ export default function Footer() {
           <div>
             <h4 style={HEADING}>Start a conversation</h4>
             {CONVERSATION.map(([href, label]) => (
-              <SiteLink key={label} href={href} style={LINK} className={sx({ hover: LINK_HOVER })}>
+              <SiteLink
+                key={label}
+                href={href}
+                style={LINK}
+                className={sx({ hover: LINK_HOVER })}
+                {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : null)}
+              >
                 {label}
               </SiteLink>
             ))}

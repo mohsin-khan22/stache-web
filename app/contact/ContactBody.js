@@ -190,17 +190,13 @@ export default function ContactBody() {
           >
             Start the conversation.
           </h3>
-          <p style={{ color: '#a7a7a7', margin: '0 0 1rem' }}>
-            The source profile did not contain final public contact details, so the email, phone, website, and social
-            links remain launch placeholders.
-          </p>
           <div ref={addReveal} style={ROW}>
             <small style={ROW_LABEL}>Email</small>
-            <a href="mailto:hello@stache.example">hello@stache.example</a>
+            <a href="mailto:adam@stachedxb.com">adam@stachedxb.com</a>
           </div>
           <div ref={addReveal} style={ROW}>
             <small style={ROW_LABEL}>Phone</small>
-            <span>+971 XX XXX XXXX</span>
+            <a href="tel:+971559549447">+971 55 954 9447</a>
           </div>
           <div ref={addReveal} style={ROW}>
             <small style={ROW_LABEL}>Location</small>
@@ -208,11 +204,13 @@ export default function ContactBody() {
           </div>
           <div ref={addReveal} style={{ ...ROW, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <small style={{ textTransform: 'uppercase', letterSpacing: '0.12em', color: '#ef2329' }}>Social</small>
-            <a href="#" style={{ transition: 'color 0.2s ease' }}>
+            <a
+              href="https://www.instagram.com/stachedxb/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ transition: 'color 0.2s ease' }}
+            >
               Instagram <span data-arrow="">↗</span>
-            </a>
-            <a href="#" style={{ transition: 'color 0.2s ease' }}>
-              LinkedIn <span data-arrow="">↗</span>
             </a>
           </div>
         </aside>
