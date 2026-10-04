@@ -11,15 +11,15 @@ import { FLIP_EASE } from '../_chrome/motion';
 //
 // Sector lines on all nine are confirmed by the client's work-page copy.
 const PROJECTS = [
-  { title: 'Mercedes-Benz', sector: 'Social · Performance · Video', category: 'automotive', image: '/assets/images/mercedes-benz.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mercedes-Benz GLE at night on a Dubai highway', size: 'large' },
+  { title: 'Mercedes-Benz', sector: 'Social · Performance · Video', category: 'automotive', image: '/assets/images/mercedes-benz.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mercedes-Benz GLE at night on a Dubai highway', size: 'large', href: '/work/mercedes-benz' },
   { title: 'Talabat', sector: 'Video · Social content', category: 'lifestyle', image: '/assets/images/talabat.jpg', fit: 'cover', pos: 'center 45%', alt: 'Talabat gaming campaign', size: 'small' },
   { title: 'NSTI Festival', sector: 'Launch · Social · Performance', category: 'government', image: '/assets/images/nsti-festival.jpg', fit: 'cover', pos: 'center 45%', alt: 'NSTI Festival virtual reality experience', size: 'small', href: '/work/nsti' },
   { title: 'Climate Change & Environment', sector: 'Immersive video · Localisation', category: 'government', image: '/assets/images/climate-mangroves.jpg', fit: 'cover', pos: 'center 50%', alt: 'Immersive mangrove projection for the Ministry of Climate Change and Environment', size: 'large' },
   { title: 'TAQA', sector: 'Events · Brand activation', category: 'government', image: '/assets/images/taqa.jpg', fit: 'cover', pos: 'center 50%', alt: 'TAQA outdoor event stage', size: 'large' },
-  { title: 'Mitsubishi', sector: 'Automotive · Social', category: 'automotive', image: '/assets/images/mitsubishi.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mitsubishi SUV on a Dubai overpass at dusk', size: 'small' },
-  { title: 'Bioderma', sector: 'Consumer health · Social', category: 'lifestyle', image: '/assets/images/bioderma.jpg', fit: 'cover', pos: 'center 40%', alt: 'Bioderma Photoderm sun care campaign', size: 'small' },
+  { title: 'Mitsubishi', sector: 'Automotive · Social', category: 'automotive', image: '/assets/images/mitsubishi.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mitsubishi SUV on a Dubai overpass at dusk', size: 'small', href: '/work/mitsubishi' },
+  { title: 'Bioderma', sector: 'Consumer health · Social', category: 'lifestyle', image: '/assets/images/bioderma.jpg', fit: 'cover', pos: 'center 40%', alt: 'Bioderma Photoderm sun care campaign', size: 'small', href: '/work/bioderma' },
   { title: 'Omnipod', sector: 'Healthcare · Lifestyle', category: 'lifestyle', image: '/assets/images/omnipod.jpg', fit: 'cover', pos: 'center 45%', alt: 'Omnipod family lifestyle campaign', size: 'small', href: '/work/omnipod' },
-  { title: 'SEE Institute', sector: 'Events · Institutional', category: 'government', image: '/assets/images/see-institute.jpg', fit: 'cover', pos: 'center 45%', alt: 'SEE Institute conference auditorium', size: 'small' },
+  { title: 'SEE Institute', sector: 'Events · Institutional', category: 'government', image: '/assets/images/see-institute.jpg', fit: 'cover', pos: 'center 45%', alt: 'SEE Institute conference auditorium', size: 'small', href: '/work/see-institute' },
 ];
 
 const FILTERS = [

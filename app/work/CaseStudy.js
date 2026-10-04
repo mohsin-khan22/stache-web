@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { Barlow, Barlow_Condensed } from 'next/font/google';
 import { useChrome } from '../_chrome/chrome-context';
+import SiteLink from '../_chrome/SiteLink';
 import './case-study.css';
 
 // The exports pulled these from Google Fonts at runtime; next/font fetches them
@@ -16,8 +17,19 @@ const barlowCondensed = Barlow_Condensed({
 
 const pad = (n) => String(n).padStart(2, '0');
 
+// The exports wrap a drifting picture in a .par box carrying its factor;
+// pictures without one render bare.
+function Parallax({ factor, children }) {
+  if (!factor) return children;
+  return (
+    <div className="par" data-par={factor}>
+      {children}
+    </div>
+  );
+}
+
 /**
- * One case study (/work/nsti, /work/omnipod). The layout and motion are the
+ * One case study (/work/<slug>, data in case-studies.js). The layout and motion are the
  * standalone exports', with the site's own header, footer and scroll bar
  * around them instead of the copies each export carried.
  *
@@ -34,16 +46,43 @@ export default function CaseStudy({ study }) {
   useEffect(() => {
     const root = rootRef.current;
     const hero = heroRef.current;
-    const targets = root.querySelectorAll('.rv,.wipe,.band,.loud');
+    const targets = root.querySelectorAll('.rv,.wipe,.band,.loud,.cards');
     const steps = root.querySelector('.steps');
     const items = steps.querySelectorAll('li');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // [data-par] pictures drift against the scroll, each by its own factor,
+    // over-scaled so the drift never shows an edge.
+    let frame = 0;
+    const pars = reduce ? [] : Array.from(root.querySelectorAll('[data-par]'));
+    const drift = () => {
+      frame = 0;
+      const vh = window.innerHeight;
+      pars.forEach((p) => {
+        const r = p.parentNode.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const c = (r.top + r.height / 2 - vh / 2) * -parseFloat(p.dataset.par);
+        p.style.transform = `translateY(${c.toFixed(1)}px) scale(1.14)`;
+      });
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(drift);
+    };
+    if (pars.length) {
+      pars.forEach((p) => (p.style.transform = 'scale(1.14)'));
+      window.addEventListener('scroll', onScroll, { passive: true });
+      drift();
+    }
+    const stopDrift = () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(frame);
+    };
 
     if (!('IntersectionObserver' in window) || reduce) {
       targets.forEach((t) => t.classList.add('in'));
       items.forEach((l) => l.classList.add('on'));
       steps.classList.add('run');
-      return undefined;
+      return stopDrift;
     }
 
     const timers = [];
@@ -86,14 +125,15 @@ export default function CaseStudy({ study }) {
     }
 
     return () => {
+      stopDrift();
       if (mo) mo.disconnect();
       if (io) io.disconnect();
       if (so) so.disconnect();
       timers.forEach(clearTimeout);
     };
-  }, []);
+  }, [study.slug]);
 
-  const { facts, spread, flow, story, crew, band } = study;
+  const { facts, ticker, strip, spread, flow, story, crew, pillars, band } = study;
   const bandWords = band.line.split(' ');
 
   return (
@@ -136,33 +176,47 @@ export default function CaseStudy({ study }) {
             </div>
           </div>
           <figure className="poster">
-            <img src={study.poster.src} alt={study.poster.alt} />
+            <Parallax factor={study.poster.parallax}>
+              <img src={study.poster.src} alt={study.poster.alt} />
+            </Parallax>
           </figure>
         </div>
       </section>
 
-      <div className="ticker" aria-label={study.tickerLabel}>
-        <div className="track">
-          {[false, true].map((dup) => (
-            <ul key={String(dup)} aria-hidden={dup || undefined}>
-              {study.ticker.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-          ))}
+      {ticker && (
+        <div className="ticker" aria-label={ticker.label}>
+          <div className="track">
+            {[false, true].map((dup) => (
+              <ul key={String(dup)} aria-hidden={dup || undefined}>
+                {ticker.items.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="strip">
-        {study.strip.map((s, i) => (
+      <div className={`strip${strip.variant ? ` ${strip.variant}` : ''}`}>
+        {strip.items.map((s, i) => (
           <figure key={s.src} className={`wipe${i ? ` d${i}` : ''}`}>
             <img src={s.src} alt={s.alt} loading="lazy" />
+            {s.tagline && <span className="tagline">{s.tagline}</span>}
           </figure>
         ))}
       </div>
       <section className="spread">
         <div className="red">
-          <h2 className="rv">{spread.name}</h2>
+          <h2 className={`rv${spread.compact ? ' compact' : ''}`}>
+            {typeof spread.name === 'string'
+              ? spread.name
+              : spread.name.map((line, i) => (
+                  <span key={i}>
+                    {i > 0 && <br />}
+                    <span style={i > 0 ? { whiteSpace: 'nowrap' } : undefined}>{line}</span>
+                  </span>
+                ))}
+          </h2>
           <p className="sub rv d1">{study.sector}</p>
           <p className="client rv d2">
             <b>CLIENT:</b> {spread.client}
@@ -210,12 +264,32 @@ export default function CaseStudy({ study }) {
                 ))}
               </span>
             </div>
+            {story.formats && (
+              <ul className="formats rv">
+                {story.formats.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
+              </ul>
+            )}
           </div>
-          <div className="figbox">
-            <figure className="wipe">
-              <img src={story.image.src} alt={story.image.alt} loading="lazy" />
-            </figure>
-          </div>
+          {story.bigword ? (
+            <p
+              className={`bigword rv${story.bigword.compact ? ' compact' : ''}${story.bigword.dash ? ' dash' : ''}`}
+              aria-hidden="true"
+            >
+              {story.bigword.words.map((w, i) => (
+                <span key={i} className={`slx${i === 1 ? ' r' : ''}`}>
+                  {w}
+                </span>
+              ))}
+            </p>
+          ) : (
+            <div className="figbox">
+              <figure className="wipe">
+                <img src={story.image.src} alt={story.image.alt} loading="lazy" />
+              </figure>
+            </div>
+          )}
         </div>
         <div className="right">
           <h2 id="story-h" className="rv">
@@ -242,25 +316,55 @@ export default function CaseStudy({ study }) {
         </div>
       </section>
 
-      <section className="crew" aria-labelledby="crew-h">
-        <div className="wrap">
-          <div className="head">
-            <h2 id="crew-h" className="rv">
-              {crew.heading[0]}
-              <br />
-              {crew.heading[1]}
-            </h2>
-            <p className="rv d1">{crew.intro}</p>
+      {crew && (
+        <section className="crew" aria-labelledby="crew-h">
+          <div className="wrap">
+            <div className="head">
+              <h2 id="crew-h" className="rv">
+                {crew.heading[0]}
+                <br />
+                {crew.heading[1]}
+              </h2>
+              <p className="rv d1">{crew.intro}</p>
+            </div>
+            <div className={`photos${crew.layout ? ` ${crew.layout}` : ''}`}>
+              {crew.photos.map((ph, i) => (
+                <figure key={ph.src} className={`wipe${i ? ` d${i}` : ''}${ph.shape ? ` ${ph.shape}` : ''}`}>
+                  <Parallax factor={ph.parallax}>
+                    <img src={ph.src} alt={ph.alt} loading="lazy" />
+                  </Parallax>
+                </figure>
+              ))}
+            </div>
           </div>
-          <div className={`photos${crew.photos.length === 1 ? ' one' : ''}`}>
-            {crew.photos.map((ph, i) => (
-              <figure key={ph.src} className={`wipe${i ? ` d${i}` : ''} ${ph.shape}`}>
-                <img src={ph.src} alt={ph.alt} loading="lazy" />
-              </figure>
-            ))}
+        </section>
+      )}
+
+      {pillars && (
+        <section className="pillars" aria-labelledby="pil-h">
+          <div className="wrap">
+            <div className="head">
+              <h2 id="pil-h" className="rv">
+                {pillars.heading[0]}
+                <br />
+                {pillars.heading[1]}
+              </h2>
+              <p className="rv d1">{pillars.intro}</p>
+            </div>
+            <ul className="cards">
+              {pillars.cards.map(([title, body], i) => (
+                <li key={title}>
+                  <span className="n">{pad(i + 1)}</span>
+                  <div>
+                    <h3>{title}</h3>
+                    <p>{body}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="band" aria-label="Outcome">
         <div className="wrap">
@@ -285,9 +389,9 @@ export default function CaseStudy({ study }) {
           <h2 id="cta" className="ask">
             Ready to make your brand impossible to ignore?
           </h2>
-          <a className="talk" href="mailto:adam@stachedxb.com">
+          <SiteLink className="talk" href="/contact">
             Let’s talk.
-          </a>
+          </SiteLink>
           <div className="contacts">
             <div>
               <h3>EMAIL:</h3>

@@ -1,6 +1,5 @@
 /*
- * Case study pages (/work/nsti, /work/omnipod), ported from the standalone
- * NSTI.html / OMNIPOD.html exports.
+ * Case study pages (/work/<slug>), ported from the standalone HTML exports.
  *
  * Global CSS stays in the document after a client-side navigation, so every
  * rule here is scoped under .cs — nothing may reach the site chrome or another
@@ -146,12 +145,81 @@
 .cs .contacts a:hover{color:var(--cream);text-decoration:underline}
 @media(max-width:700px){.cs .contacts{grid-template-columns:1fr;gap:1.5rem}.cs .contacts div{border-left:0;padding:0}}
 
+/* ---------- variants used by the later exports ---------- */
+/* SEE Institute, Mercedes-Benz, Bioderma and Mitsubishi share the base above
+   and add these: a two- or three-up strip with taglines, a parallax wrapper,
+   format pills and a big-word panel in the story, image pairs, pillar cards. */
+.cs .par{will-change:transform;height:100%}
+.cs .poster{overflow:hidden}
+
+.cs .strip.two{grid-template-columns:1fr 1fr}
+.cs .strip.two img{aspect-ratio:11/8}
+.cs .strip.three{grid-template-columns:repeat(3,1fr)}
+.cs .strip.three img{aspect-ratio:1/1}
+@media(max-width:700px){
+  .cs .strip.two,.cs .strip.three{grid-template-columns:1fr}
+  .cs .strip.two figure:first-child,.cs .strip.three figure:first-child{grid-column:auto}
+  .cs .strip.two figure:first-child img{aspect-ratio:11/8}
+  .cs .strip.three figure:first-child img{aspect-ratio:1/1}
+}
+.cs .strip figure .tagline{position:absolute;left:1rem;bottom:1rem;font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.1rem;letter-spacing:.03em;color:var(--cream);background:var(--red);padding:.2rem .7rem}
+
+.cs .spread h2.compact{font-size:clamp(2rem,3vw,3.8rem)}
+
+.cs .crew .wide{overflow:hidden}
+.cs .crew .photos.pair{grid-template-columns:1fr 1fr}
+.cs .crew .photos.pair img{aspect-ratio:1/1}
+@media(max-width:700px){.cs .crew .photos.pair{grid-template-columns:1fr}}
+
+.cs .bigword{flex:1;display:flex;flex-direction:column;justify-content:center;padding:2.5rem clamp(1.5rem,4vw,3.5rem) 3.5rem;font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.88;font-size:clamp(3.4rem,7vw,6.4rem);overflow:hidden}
+.cs .bigword.compact{font-size:clamp(3rem,5.4vw,5.4rem)}
+.cs .bigword span{display:block;color:var(--cream)}
+.cs .bigword span:nth-child(2){color:var(--red)}
+.cs .bigword.dash span:nth-child(2)::after{content:"";display:inline-block;width:.55em;height:.08em;background:var(--red);margin-left:.18em;vertical-align:.32em}
+
+.cs .story ul.formats{padding-left:0}
+.cs .formats{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:2.2rem}
+.cs .formats li{list-style:none;font-family:var(--display);font-weight:700;text-transform:uppercase;font-size:.95rem;letter-spacing:.03em;border:1.5px solid var(--cream);color:var(--cream);padding:.25rem .8rem;border-radius:999px}
+/* the story's list spacing (li+li) would push every pill after the first down — fixed here, not in the export */
+.cs .story .formats li+li{margin-top:0}
+
+.cs .pillars{background:var(--black);padding:6rem 0}
+.cs .pillars .head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,26rem);gap:2rem;align-items:end;margin-bottom:3rem}
+.cs .pillars h2{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(3rem,7vw,6.4rem);line-height:.85;color:var(--cream)}
+.cs .pillars .head p{color:var(--bone)}
+.cs .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;list-style:none;perspective:1200px}
+.cs .cards li{padding:2.5rem 2rem 2.8rem;min-height:300px;display:flex;flex-direction:column;justify-content:space-between;gap:2rem}
+.cs .cards li:nth-child(1){background:var(--red);color:var(--cream)}
+.cs .cards li:nth-child(2){background:var(--cream);color:var(--ink)}
+.cs .cards li:nth-child(3){background:var(--ink);color:var(--cream)}
+.cs .cards .n{font-family:var(--display);font-weight:900;font-size:4.2rem;line-height:1}
+.cs .cards li:nth-child(2) .n,.cs .cards li:nth-child(3) .n{color:var(--red)}
+.cs .cards h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(1.8rem,2.7vw,3rem);overflow-wrap:break-word;line-height:.9;margin-bottom:.6rem}
+.cs .cards p{font-size:1.02rem;max-width:30ch}
+@media(max-width:860px){.cs .pillars .head,.cs .cards{grid-template-columns:1fr}.cs .cards li{min-height:0}}
+
 /* ---------- per-study overrides ---------- */
-/* "Omnipod" / "Campaign" are longer words than "NSTI" / "Festival" */
-.cs--omnipod .poster img{aspect-ratio:4/5}
-.cs--omnipod .hero h1 .l1{font-size:clamp(4rem,9.5vw,9.5rem);white-space:nowrap}
-.cs--omnipod .hero h1 .l2{font-size:clamp(3rem,7vw,6.4rem);white-space:nowrap}
-@media(max-width:900px){.cs--omnipod .hero h1 .l1{font-size:min(15vw,10rem)}.cs--omnipod .hero h1 .l2{font-size:min(12vw,6rem)}}
+/* Every study after NSTI has a 4:5 poster and a one-line title sized to its own words */
+.cs--omnipod .poster img,.cs--see-institute .poster img,.cs--mercedes-benz .poster img,.cs--bioderma .poster img,.cs--mitsubishi .poster img{aspect-ratio:4/5}
+.cs--omnipod .hero h1 span,.cs--see-institute .hero h1 span,.cs--mercedes-benz .hero h1 span,.cs--bioderma .hero h1 span,.cs--mitsubishi .hero h1 span{white-space:nowrap}
+.cs--omnipod .hero h1 .l1{font-size:clamp(4rem,9.5vw,9.5rem)}
+.cs--omnipod .hero h1 .l2{font-size:clamp(3rem,7vw,6.4rem)}
+.cs--see-institute .hero h1 .l1{font-size:clamp(7rem,19vw,16rem)}
+.cs--see-institute .hero h1 .l2{font-size:clamp(3rem,7.4vw,6.8rem)}
+.cs--mercedes-benz .hero h1 .l1{font-size:clamp(4rem,9.5vw,9.5rem)}
+.cs--mercedes-benz .hero h1 .l2{font-size:clamp(2.2rem,5.2vw,5rem)}
+.cs--bioderma .hero h1 .l1{font-size:clamp(4rem,9.5vw,9.5rem)}
+.cs--bioderma .hero h1 .l2{font-size:clamp(3rem,7vw,6.4rem)}
+.cs--mitsubishi .hero h1 .l1{font-size:clamp(3.4rem,6.6vw,6.6rem)}
+.cs--mitsubishi .hero h1 .l2{font-size:clamp(3rem,7vw,6.4rem)}
+@media(max-width:900px){
+  .cs--omnipod .hero h1 .l1{font-size:min(15vw,10rem)}.cs--omnipod .hero h1 .l2{font-size:min(12vw,6rem)}
+  .cs--see-institute .hero h1 .l1{font-size:min(30vw,14rem)}.cs--see-institute .hero h1 .l2{font-size:min(14vw,6rem)}
+  .cs--mercedes-benz .hero h1 .l1{font-size:min(16vw,9rem)}.cs--mercedes-benz .hero h1 .l2{font-size:min(8.2vw,5rem)}
+  .cs--bioderma .hero h1 .l1{font-size:min(16vw,9rem)}.cs--bioderma .hero h1 .l2{font-size:min(14vw,6rem)}
+  .cs--mitsubishi .hero h1 .l1{font-size:min(10.5vw,6rem)}.cs--mitsubishi .hero h1 .l2{font-size:min(14vw,6rem)}
+}
+.cs--bioderma .cards h3{font-size:clamp(2.2rem,3.4vw,3rem);overflow-wrap:normal}
 
 /* ================= ANIMATION STATES (only without reduced motion) ================= */
 /* The hero waits on the shell's reveal gate, which sets [data-revealed] once the
@@ -184,6 +252,21 @@
   .cs .loud .lb{clip-path:inset(0 50% 0 50%);transition:clip-path .9s var(--ease) .5s}
   .cs .loud.in{transform:none;opacity:1}
   .cs .loud.in .lb{clip-path:inset(0 0 0 0)}
+
+  .cs .slx{opacity:0;transform:translateX(-60px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .cs .slx.r{transform:translateX(60px)}
+  .cs .bigword.in .slx{opacity:1;transform:none}
+  .cs .bigword .slx:nth-child(2){transition-delay:.15s}.cs .bigword .slx:nth-child(3){transition-delay:.3s}
+  .cs .formats li{opacity:0;transform:scale(.7);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+  .cs .formats.in li{opacity:1;transform:none}
+  .cs .formats.in li:nth-child(2){transition-delay:.1s}.cs .formats.in li:nth-child(3){transition-delay:.2s}.cs .formats.in li:nth-child(4){transition-delay:.3s}
+  .cs .strip figure .tagline{opacity:0;transform:translateY(10px);transition:opacity .6s var(--ease) .9s,transform .6s var(--ease) .9s}
+  .cs .strip figure.in .tagline{opacity:1;transform:none}
+  .cs .cards li{opacity:0;transform:rotateX(-25deg) translateY(50px);transform-origin:top;transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .cs .cards.in li{opacity:1;transform:none}
+  .cs .cards.in li:nth-child(2){transition-delay:.15s}.cs .cards.in li:nth-child(3){transition-delay:.3s}
+  .cs .cards li .n{display:inline-block;transform:scale(.4);opacity:0;transition:transform .7s var(--ease) .45s,opacity .7s var(--ease) .45s}
+  .cs .cards.in li .n{transform:none;opacity:1}
 }
 @media (prefers-reduced-motion:reduce){
   .cs .ticker .track{animation:none;flex-wrap:wrap}

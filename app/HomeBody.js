@@ -167,6 +167,7 @@ const PROJECTS = [
     imgStyle: { objectPosition: '50% 55%', filter: 'saturate(0.98) contrast(1.04) brightness(0.96)' },
     sector: 'Automotive',
     title: 'Mercedes-Benz',
+    href: '/work/mercedes-benz',
   },
   {
     span: 4,
