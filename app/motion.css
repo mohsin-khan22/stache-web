@@ -176,6 +176,14 @@ div:has(> [data-turn="self"]) {
   rotate: -40deg;
 }
 
+/* The baseline's hover fills the badge red, and on a card that is a link the
+   global a:hover turns its text red too — the arrow vanished into the badge.
+   The arrow stays white whatever the card's hover colour. */
+a:hover [data-arrow-badge],
+[data-card]:hover [data-arrow-badge] {
+  color: #fff;
+}
+
 /* --- card titles ---------------------------------------------------------- */
 
 [data-card] h3,

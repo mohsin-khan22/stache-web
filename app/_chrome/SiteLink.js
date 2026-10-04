@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useContext } from 'react';
 import { ChromeContext } from './chrome-context';
 
-const INTERNAL = /^\/(?:work|services|about|contact)?$/;
+const INTERNAL = /^\/(?:work(?:\/(?:nsti|omnipod))?|services|about|contact)?$/;
 
 // A click the browser would answer with an in-page navigation. Anything else —
 // a new tab, a middle click, a modifier held down — has to keep the browser's

@@ -13,12 +13,12 @@ import { FLIP_EASE } from '../_chrome/motion';
 const PROJECTS = [
   { title: 'Mercedes-Benz', sector: 'Social · Performance · Video', category: 'automotive', image: '/assets/images/mercedes-benz.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mercedes-Benz GLE at night on a Dubai highway', size: 'large' },
   { title: 'Talabat', sector: 'Video · Social content', category: 'lifestyle', image: '/assets/images/talabat.jpg', fit: 'cover', pos: 'center 45%', alt: 'Talabat gaming campaign', size: 'small' },
-  { title: 'NSTI Festival', sector: 'Launch · Social · Performance', category: 'government', image: '/assets/images/nsti-festival.jpg', fit: 'cover', pos: 'center 45%', alt: 'NSTI Festival virtual reality experience', size: 'small' },
+  { title: 'NSTI Festival', sector: 'Launch · Social · Performance', category: 'government', image: '/assets/images/nsti-festival.jpg', fit: 'cover', pos: 'center 45%', alt: 'NSTI Festival virtual reality experience', size: 'small', href: '/work/nsti' },
   { title: 'Climate Change & Environment', sector: 'Immersive video · Localisation', category: 'government', image: '/assets/images/climate-mangroves.jpg', fit: 'cover', pos: 'center 50%', alt: 'Immersive mangrove projection for the Ministry of Climate Change and Environment', size: 'large' },
   { title: 'TAQA', sector: 'Events · Brand activation', category: 'government', image: '/assets/images/taqa.jpg', fit: 'cover', pos: 'center 50%', alt: 'TAQA outdoor event stage', size: 'large' },
   { title: 'Mitsubishi', sector: 'Automotive · Social', category: 'automotive', image: '/assets/images/mitsubishi.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mitsubishi SUV on a Dubai overpass at dusk', size: 'small' },
   { title: 'Bioderma', sector: 'Consumer health · Social', category: 'lifestyle', image: '/assets/images/bioderma.jpg', fit: 'cover', pos: 'center 40%', alt: 'Bioderma Photoderm sun care campaign', size: 'small' },
-  { title: 'Omnipod', sector: 'Healthcare · Lifestyle', category: 'lifestyle', image: '/assets/images/omnipod.jpg', fit: 'cover', pos: 'center 45%', alt: 'Omnipod family lifestyle campaign', size: 'small' },
+  { title: 'Omnipod', sector: 'Healthcare · Lifestyle', category: 'lifestyle', image: '/assets/images/omnipod.jpg', fit: 'cover', pos: 'center 45%', alt: 'Omnipod family lifestyle campaign', size: 'small', href: '/work/omnipod' },
   { title: 'SEE Institute', sector: 'Events · Institutional', category: 'government', image: '/assets/images/see-institute.jpg', fit: 'cover', pos: 'center 45%', alt: 'SEE Institute conference auditorium', size: 'small' },
 ];
 
@@ -75,7 +75,8 @@ export default function WorkBody() {
   }));
 
   const visibleProjects = PROJECTS.filter((p) => active === 'all' || p.category === active).map((p, i) => ({
-    title: p.title, sector: p.sector, alt: p.alt,
+    title: p.title, sector: p.sector, alt: p.alt, href: p.href,
+    Card: p.href ? SiteLink : 'div',
     mediaStyle: p.fit === 'contain' ? {
       position: 'absolute', inset: '20px 0 74px',
       backgroundImage: 'url(' + p.image + '), radial-gradient(circle at 50% 42%,rgba(239,35,41,0.22),transparent 62%)',
@@ -220,13 +221,14 @@ export default function WorkBody() {
           </div>
           <div className="r-12col" style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: '1.4rem' }}>
             {visibleProjects.map((p, i) => (
-              <div
+              <p.Card
                 key={i}
-                role="img"
+                // cards with a case study link to it; the rest stay pictures
+                {...(p.href ? { href: p.href } : { role: 'img' })}
                 ref={addReveal}
                 data-card=""
                 data-sheen=""
-                aria-label={p.alt}
+                aria-label={p.href ? p.title + ' case study' : p.alt}
                 className={`r-tall ${sx({ hover: 'transform:translateY(-6px);border-color:rgba(239,35,41,0.6);box-shadow:0 26px 64px rgba(0,0,0,0.6)' })}`}
                 style={p.cardStyle}
               >
@@ -293,7 +295,7 @@ export default function WorkBody() {
                     ↗
                   </span>
                 </div>
-              </div>
+              </p.Card>
             ))}
           </div>
         </div>

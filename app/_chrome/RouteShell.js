@@ -29,7 +29,8 @@ const PAGES = {
 export default function RouteShell({ children }) {
   const pathname = usePathname();
   const router = useRouter();
-  const page = PAGES[pathname] ?? null;
+  // case studies live under /work and keep Work marked in the nav
+  const page = PAGES[pathname] ?? (pathname.startsWith('/work/') ? 'work' : null);
   return (
     <SiteShell
       page={page}

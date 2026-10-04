@@ -157,6 +157,7 @@ const PROJECTS = [
     imgStyle: { objectPosition: '50% 45%', filter: 'saturate(1.02) contrast(1.02)' },
     sector: 'Government & public sector',
     title: 'NSTI Festival',
+    href: '/work/nsti',
   },
   {
     span: 8,
@@ -1011,7 +1012,7 @@ export default function HomeBody() {
             {PROJECTS.map((p) => (
               <SiteLink
                 key={p.title}
-                href="/work"
+                href={p.href || '/work'}
                 ref={addReveal}
                 data-card=""
                 data-sheen=""
