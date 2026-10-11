@@ -3,13 +3,15 @@
 // everything that differs between them lives here. Images were embedded as
 // base64 in the exports and now sit in assets/images/<slug>-*.jpg.
 //
+// hero holds the full-bleed picture plus the crop (pos / posMobile) and title
+// sizes (title / titleMobile, one per line) each export tuned by hand.
+// facts are [label, text] rows; the first spans the full width.
+//
 // Optional sections — a study renders only the ones it has:
-//   ticker            the red marquee under the hero
-//   poster.parallax   drift factor for the hero image
-//   strip.variant     'two' | 'three' (default: three-up, first image full width on phones)
+//   strip.variant     'one' | 'two' | 'three' (default: three-up, first image full width on phones)
 //   story.formats     pills under the tag; story.bigword replaces story.image
 //   crew              photo section; layout 'one' | 'pair' (default: wide + tall)
-//   pillars           three numbered cards
+//   pillars           numbered cards, [title, body, kicker?]; variant 'two' for two long cards
 const img = (slug, name) => `/assets/images/${slug}-${name}.jpg`;
 
 export const CASE_STUDIES = {
@@ -21,22 +23,22 @@ export const CASE_STUDIES = {
     sector: 'Government & public sector',
     heading: 'NSTI Festival UAE — National Science Technology and Innovation Festival',
     lines: ['NSTI', 'Festival'],
-    facts: {
-      client: 'UAE Ministry of Education — National Science, Technology and Innovation Festival',
-      scope: 'Digital Launch, Social Media, PR Coverage, Performance Marketing',
-      delivered: 'Designs, real-time posts, press coverage, highlight videos and recap content',
-    },
-    poster: {
-      src: img('nsti', 'poster'),
-      alt: 'NSTI Festival 2023 campaign poster for the UAE Ministry of Education – government digital launch campaign Dubai',
-    },
-    ticker: {
-      label: 'What we covered',
-      items: ['Pre-event announcements', 'Daily agenda updates', 'Real-time posts', 'Press coverage', 'Highlight videos', 'Recap content'],
+    facts: [
+      ['Client', 'UAE Ministry of Education — National Science, Technology and Innovation Festival'],
+      ['Scope', 'Digital Launch, Social Media, PR Coverage, Performance Marketing'],
+      ['Delivered', 'Designs, real-time posts, press coverage, highlight videos and recap content'],
+    ],
+    hero: {
+      src: img('nsti', 'hero'),
+      alt: 'Speaker on stage at the NSTI Festival in front of the Ministry of Education screen – government digital launch campaign Dubai by Stache DXB Media',
+      pos: '60% 50%',
+      posMobile: '70% 50%',
+      title: ['clamp(3rem,15.50vw,12rem)', 'clamp(2rem,7.75vw,6.2rem)'],
+      titleMobile: ['29.50vw', '14.75vw'],
     },
     strip: {
       items: [
-        { src: img('nsti', 'strip-1'), alt: 'Speaker on stage at the NSTI Festival in front of the Ministry of Education screen – STEM festival marketing UAE' },
+        { src: img('nsti', 'strip-1'), alt: 'NSTI Festival campaign key visual for the UAE Ministry of Education – STEM festival marketing UAE' },
         { src: img('nsti', 'strip-2'), alt: 'Live science show at the NSTI Festival with a young volunteer – education sector marketing Dubai' },
         { src: img('nsti', 'strip-3'), alt: 'Student at a hands-on NSTI Festival activity – National Science Technology and Innovation Festival content' },
       ],
@@ -98,18 +100,18 @@ export const CASE_STUDIES = {
     sector: 'Healthcare & medtech',
     heading: 'Omnipod UAE marketing campaign — healthcare video production Dubai',
     lines: ['Omnipod', 'Campaign'],
-    facts: {
-      client: 'Omnipod — UAE',
-      scope: 'Video Campaign Production, Healthcare Social Media Management',
-      delivered: 'A five-day production, managed from shoot to final cut',
-    },
-    poster: {
-      src: img('omnipod', 'poster'),
-      alt: 'Teen with a paddleboard wearing an Omnipod pod on the beach – Omnipod UAE marketing campaign by Stache DXB Media',
-    },
-    ticker: {
-      label: 'What we delivered',
-      items: ['Video campaign', 'Five-day production', 'Shoot to final cut', 'Healthcare brand campaign', 'Medtech lifestyle content', 'Recognized by global HQ'],
+    facts: [
+      ['Client', 'Omnipod — UAE'],
+      ['Scope', 'Video Campaign Production, Healthcare Social Media Management'],
+      ['Delivered', 'A five-day production, managed from shoot to final cut'],
+    ],
+    hero: {
+      src: img('omnipod', 'hero'),
+      alt: 'Mother and two children wearing Omnipod pods by a pool – Omnipod UAE marketing campaign by Stache DXB Media',
+      pos: '50% 45%',
+      posMobile: '50% 40%',
+      title: ['clamp(3rem,8.86vw,12rem)', 'clamp(2rem,5.49vw,6.2rem)'],
+      titleMobile: ['16.86vw', '10.45vw'],
     },
     strip: {
       items: [
@@ -141,7 +143,7 @@ export const CASE_STUDIES = {
       tag: { n: '5', w: ['Days', 'shoot to', 'final cut'] },
       image: {
         src: img('omnipod', 'story'),
-        alt: 'Mother and two children wearing Omnipod pods by a pool – Omnipod video production UAE',
+        alt: 'Teen with a paddleboard wearing an Omnipod pod on the beach – Omnipod video production UAE',
       },
       client: 'Omnipod',
       challenge: 'Produce a video campaign to promote Omnipod’s product line to the region, with the polish and precision the brand demanded.',
@@ -174,15 +176,18 @@ export const CASE_STUDIES = {
     sector: 'Education & sustainability',
     heading: 'SEE Institute sustainability campaign — institutional event content Dubai',
     lines: ['SEE', 'Institute'],
-    facts: {
-      client: 'SEE Institute — Sustainability through Research & Education',
-      scope: 'Event Coverage, Video Production, Content',
-      delivered: 'Full event coverage and production, translated into institutional content',
-    },
-    poster: {
-      src: img('see-institute', 'poster'),
+    facts: [
+      ['Client', 'SEE Institute — Sustainability through Research & Education'],
+      ['Scope', 'Event Coverage, Video Production, Content'],
+      ['Delivered', 'Full event coverage and production, translated into institutional content'],
+    ],
+    hero: {
+      src: img('see-institute', 'hero'),
       alt: 'SEE Institute building exterior under a clear blue sky – education and sustainability marketing UAE by Stache DXB Media',
-      parallax: 0.07,
+      pos: '35% 60%',
+      posMobile: '35% 60%',
+      title: ['clamp(3rem,16.00vw,12rem)', 'clamp(2rem,6.89vw,6.2rem)'],
+      titleMobile: ['30.00vw', '13.11vw'],
     },
     strip: {
       variant: 'two',
@@ -247,15 +252,18 @@ export const CASE_STUDIES = {
     sector: 'Automotive',
     heading: 'Gargash Mercedes-Benz — Mercedes-Benz Dubai marketing campaign',
     lines: ['Gargash', 'Mercedes-Benz'],
-    facts: {
-      client: 'Gargash Mercedes-Benz, UAE',
-      scope: 'Social Strategy, Content Production, Community Management, Performance Marketing',
-      delivered: 'Polished video content, monthly calendars and the launch of the brand’s newest service center',
-    },
-    poster: {
-      src: img('mercedes-benz', 'poster'),
+    facts: [
+      ['Client', 'Gargash Mercedes-Benz, UAE'],
+      ['Scope', 'Social Strategy, Content Production, Community Management, Performance Marketing'],
+      ['Delivered', 'Polished video content, monthly calendars and the launch of the brand’s newest service center'],
+    ],
+    hero: {
+      src: img('mercedes-benz', 'hero'),
       alt: 'Mercedes-AMG GT3 race car at golden hour during the 24H Dubai – automotive social media management UAE by Stache DXB Media',
-      parallax: 0.07,
+      pos: '45% 75%',
+      posMobile: '45% 78%',
+      title: ['clamp(3rem,8.86vw,12rem)', 'clamp(2rem,4.77vw,6.2rem)'],
+      titleMobile: ['16.86vw', '9.08vw'],
     },
     strip: {
       variant: 'three',
@@ -323,15 +331,18 @@ export const CASE_STUDIES = {
     sector: 'Lifestyle & skincare',
     heading: 'Bioderma UAE campaign — skincare brand marketing Dubai',
     lines: ['Bioderma', 'Campaign'],
-    facts: {
-      client: 'Bioderma UAE',
-      scope: 'Campaign Development, Cinematic Video Production, Campaign Content',
-      delivered: 'A series of lifestyle videos for families, mothers and everyday moments',
-    },
-    poster: {
-      src: img('bioderma', 'poster'),
+    facts: [
+      ['Client', 'Bioderma UAE'],
+      ['Scope', 'Campaign Development, Cinematic Video Production, Campaign Content'],
+      ['Delivered', 'A series of lifestyle videos for families, mothers and everyday moments'],
+    ],
+    hero: {
+      src: img('bioderma', 'hero'),
       alt: 'Child in a sun hat applying sunscreen by the pool – Bioderma UAE campaign by Stache DXB Media',
-      parallax: 0.07,
+      pos: '55% 35%',
+      posMobile: '55% 35%',
+      title: ['clamp(3rem,7.75vw,12rem)', 'clamp(2rem,4.80vw,6.2rem)'],
+      titleMobile: ['14.75vw', '9.14vw'],
     },
     strip: {
       variant: 'two',
@@ -396,15 +407,18 @@ export const CASE_STUDIES = {
     sector: 'Automotive',
     heading: 'Mitsubishi Motors UAE campaign — automotive video production Dubai',
     lines: ['Mitsubishi', 'Motors'],
-    facts: {
-      client: 'Mitsubishi Motors UAE',
-      scope: 'Video Production, Outdoor Advertising, Social Media Content',
-      delivered: 'Video campaigns for the newest models, plus statics for road banners',
-    },
-    poster: {
-      src: img('mitsubishi', 'poster'),
-      alt: 'Mitsubishi XFORCE kicking up dust on a dirt track – automotive video production Dubai by Stache DXB Media',
-      parallax: 0.07,
+    facts: [
+      ['Client', 'Mitsubishi Motors UAE'],
+      ['Scope', 'Video Production, Outdoor Advertising, Social Media Content'],
+      ['Delivered', 'Video campaigns for the newest models, plus statics for road banners'],
+    ],
+    hero: {
+      src: img('mitsubishi', 'hero'),
+      alt: 'Mitsubishi XFORCE on a Dubai highway at night with the city skyline – automotive video production Dubai by Stache DXB Media',
+      pos: '25% 60%',
+      posMobile: '55% 70%',
+      title: ['clamp(3rem,6.20vw,12rem)', 'clamp(2rem,3.84vw,6.2rem)'],
+      titleMobile: ['11.80vw', '7.32vw'],
     },
     strip: {
       variant: 'two',
@@ -454,7 +468,7 @@ export const CASE_STUDIES = {
       photos: [
         {
           src: img('mitsubishi', 'key-visual'),
-          alt: 'Mitsubishi XFORCE on a Dubai highway at night with the city skyline – Mitsubishi Motors UAE outdoor campaign key visual',
+          alt: 'Mitsubishi XFORCE kicking up dust on a dirt track – campaign-ready automotive content Dubai',
           shape: 'wide',
           parallax: 0.06,
         },
@@ -463,6 +477,395 @@ export const CASE_STUDIES = {
     band: {
       line: 'From screen to street.',
       small: 'A consistent, premium visual identity that matched the caliber of the Mitsubishi name.',
+    },
+  },
+
+  adio: {
+    slug: 'adio',
+    title: 'ADIO Case Study | Event Coverage & Production Abu Dhabi',
+    description:
+      'How Stache DXB Media delivered production and event coverage for ADIO at the Abu Dhabi-Brazil Partnership Summit, capturing key moments with professional quality content built for impact.',
+    sector: 'Government & investment',
+    heading: 'ADIO event coverage and production — Abu Dhabi-Brazil Partnership Summit',
+    lines: ['ADIO', 'Summit'],
+    facts: [
+      ['Client', 'ADIO — Abu Dhabi Investment Office'],
+      ['Scope', 'Production, Event Coverage'],
+      ['Event', 'Gateway to Growth: Abu Dhabi-Brazil Partnership Summit'],
+    ],
+    hero: {
+      src: img('adio', 'hero'),
+      alt: 'Abu Dhabi-Brazil Partnership Summit stage with lit podium – ADIO event coverage by Stache DXB Media',
+      pos: '55% 55%',
+      posMobile: '58% 60%',
+      title: ['clamp(3rem,15.50vw,12rem)', 'clamp(2rem,9.61vw,6.2rem)'],
+      titleMobile: ['29.50vw', '18.29vw'],
+    },
+    strip: {
+      variant: 'two',
+      items: [
+        { src: img('adio', 'strip-1'), alt: 'ADIO speaker at the podium during the Abu Dhabi-Brazil Partnership Summit – event production Abu Dhabi', tagline: 'On stage' },
+        { src: img('adio', 'strip-2'), alt: 'Speaker addressing the Abu Dhabi-Brazil Partnership Summit – professional event coverage', tagline: 'In session' },
+      ],
+    },
+    spread: {
+      name: 'ADIO',
+      client: 'Abu Dhabi Investment Office',
+      body: [
+        'Stache DXB Media delivered production and event coverage for ADIO, capturing the brand’s key moments with professional quality content built for impact.',
+        'At the Abu Dhabi-Brazil Partnership Summit, our team covered the stage and its speakers, turning key moments into event content built to carry the summit’s message further.',
+      ],
+    },
+    flow: {
+      heading: 'From stage to story',
+      intro: 'Production and coverage on the day, delivered to the standard the brand expects.',
+      steps: [
+        ['Production', 'Professional production, on site.'],
+        ['Event coverage', 'Covering the summit as it happened.'],
+        ['Key moments', 'Every important moment on stage, captured.'],
+        ['Professional quality', 'Content held to the brand’s standard.'],
+        ['Built for impact', 'Made to work well beyond the room.'],
+      ],
+    },
+    story: {
+      tag: { n: '2', w: ['Services,', 'one', 'standard'] },
+      formats: ['Production', 'Event coverage'],
+      bigword: { words: ['Built', 'for', 'impact'] },
+      client: 'ADIO',
+      challenge: 'Capture ADIO’s key moments at the summit with content that matches the standard of the brand.',
+      did: ['Delivered production on site', 'Provided full event coverage of the summit', 'Captured the brand’s key moments on stage'],
+      result: 'Professional quality content built for impact, ready to carry the summit’s message further.',
+    },
+    pillars: {
+      heading: ['Built for', 'the moment'],
+      intro: 'Coverage that gave the summit the professional presence it called for.',
+      cards: [
+        ['The stage', 'A summit setting, captured with care.'],
+        ['The speakers', 'Key sessions covered as they happened.'],
+        ['The story', 'Content that carries the message further.'],
+      ],
+    },
+    band: {
+      line: 'Content built for impact.',
+      small: 'Production and event coverage that captured ADIO’s key moments at professional quality.',
+    },
+  },
+
+  mangrove: {
+    slug: 'mangrove',
+    title: 'Mangrove Immersive Experience Case Study | World Governments Summit',
+    description:
+      'How Stache DXB Media developed the campaign concept, cinematic immersive video and seven localized voiceovers for the Among Mangrove Trees experience at the World Governments Summit.',
+    sector: 'Government & environment',
+    heading: 'Mangrove immersive experience — Among Mangrove Trees at the World Governments Summit',
+    lines: ['Mangrove', 'Experience'],
+    facts: [
+      ['Client', 'UAE Ministry of Climate Change & Environment'],
+      ['Scope', 'Campaign Concept, Immersive Video Production, Localization, Experience Design, Event Coverage'],
+      ['Event', 'Among Mangrove Trees, World Governments Summit'],
+    ],
+    hero: {
+      src: img('mangrove', 'hero'),
+      alt: 'Camera operator filming in the water among Abu Dhabi’s mangroves – cinematic immersive video production by Stache DXB Media',
+      pos: '55% 75%',
+      posMobile: '60% 72%',
+      title: ['clamp(4rem,7.6vw,8rem)', 'clamp(2.2rem,4.3vw,4.4rem)'],
+      titleMobile: ['min(13.5vw,8rem)', 'min(9.5vw,4.5rem)'],
+    },
+    strip: {
+      variant: 'three',
+      items: [
+        { src: img('mangrove', 'strip-1'), alt: 'Visitor at the Among Mangrove Trees experience at the World Governments Summit – immersive video production', tagline: 'At the summit' },
+        { src: img('mangrove', 'strip-2'), alt: 'Close-up of mangrove leaves at the Among Mangrove Trees experience', tagline: 'Up close' },
+        { src: img('mangrove', 'strip-3'), alt: 'Among Mangrove Trees feature wall at the World Governments Summit', tagline: 'On site' },
+      ],
+    },
+    spread: {
+      name: 'Mangrove',
+      client: 'Ministry of Climate Change & Environment',
+      body: [
+        'We developed the campaign concept and delivered cinematic video production alongside full event coverage for Mangrove, capturing the brand’s presence with a polished, premium visual approach.',
+        'At the World Governments Summit, we transported visitors into the heart of Abu Dhabi’s mangroves — producing a high-impact immersive video, developing seven localized voiceovers, and optimizing the full experience for an immersive screen environment.',
+      ],
+    },
+    flow: {
+      heading: 'From the mangroves to the summit',
+      intro: 'One concept, carried from the water’s edge to an immersive screen.',
+      steps: [
+        ['Campaign concept', 'The idea that shaped the whole experience.'],
+        ['In the mangroves', 'Cinematic filming in the heart of Abu Dhabi’s mangroves.'],
+        ['Immersive video', 'A high-impact film built for an immersive screen.'],
+        ['Seven voiceovers', 'Localized so more visitors could follow the story.'],
+        ['At the summit', 'The full experience optimized, with full event coverage.'],
+      ],
+    },
+    story: {
+      tag: { n: '7', w: ['Localized', 'voiceovers'] },
+      formats: ['Campaign concept', 'Cinematic video', 'Immersive experience', 'Event coverage'],
+      image: {
+        src: img('mangrove', 'story'),
+        alt: 'Visitors in silhouette watching the immersive mangrove video at the World Governments Summit',
+      },
+      client: 'Ministry of Climate Change & Environment',
+      challenge:
+        'Bring World Governments Summit visitors into the heart of Abu Dhabi’s mangroves, in an experience built for an immersive screen and audiences from many places.',
+      did: [
+        'Developed the campaign concept',
+        'Produced a high-impact, cinematic immersive video',
+        'Developed seven localized voiceovers',
+        'Optimized the full experience for the immersive screen and delivered full event coverage',
+      ],
+      result: 'A polished, premium experience that transported visitors into the mangroves, with the brand’s presence captured across the summit.',
+    },
+    crew: {
+      heading: ['Guardians', 'of the coast'],
+      intro: 'Every touchpoint of the experience carried the same polished, premium visual approach.',
+      layout: 'pair',
+      photos: [
+        { src: img('mangrove', 'onsite-1'), alt: 'Visitors at the Experience the Guardians of the Coast entrance – event coverage at the World Governments Summit', parallax: 0.05 },
+        { src: img('mangrove', 'onsite-2'), alt: 'Guardians of the Coast gift being handed to a visitor – premium event experience', parallax: 0.05 },
+      ],
+    },
+    band: {
+      line: 'Into the heart of the mangroves.',
+      small: 'An immersive video in seven localized voiceovers, made for the World Governments Summit.',
+    },
+  },
+
+  'ministry-of-sports': {
+    slug: 'ministry-of-sports',
+    title: 'UAE Ministry of Sports Case Study | Sports Video Production UAE',
+    description:
+      'How Stache DXB Media covered the Minister’s keynote at the World Sports Summit and produced the Elite Sports brand video “Numbers Don’t Lie” for the UAE Ministry of Sports.',
+    sector: 'Government & sport',
+    heading: 'UAE Ministry of Sports — World Sports Summit keynote and Elite Sports “Numbers Don’t Lie” brand video',
+    lines: ['Ministry', 'of Sports'],
+    facts: [
+      ['Client', 'UAE Ministry of Sports'],
+      ['Scope', 'Video Production, Campaign Content, Event Coverage, Presentation Design'],
+      ['Projects', 'World Sports Summit Minister’s Keynote and Elite Sports “Numbers Don’t Lie”'],
+    ],
+    hero: {
+      src: img('ministry-of-sports', 'hero'),
+      alt: 'UAE cyclist training on a desert road at sunset – sports video production UAE by Stache DXB Media',
+      pos: '60% 35%',
+      posMobile: '55% 30%',
+      title: ['clamp(3rem,7.75vw,12rem)', 'clamp(2rem,4.80vw,6.2rem)'],
+      titleMobile: ['14.75vw', '9.14vw'],
+    },
+    strip: {
+      variant: 'two',
+      items: [
+        { src: img('ministry-of-sports', 'strip-1'), alt: 'Equestrian athlete riding under a stormy sky – Elite Sports brand video for the UAE Ministry of Sports', tagline: 'Elite athletes' },
+        { src: img('ministry-of-sports', 'strip-2'), alt: 'UAE passport held at an airport arrivals hall – athletes travelling to training camps', tagline: 'On the road' },
+      ],
+    },
+    spread: {
+      name: 'Ministry of Sports',
+      client: 'UAE Ministry of Sports',
+      body: [
+        'Telling the story of UAE athletics with the energy and urgency it deserves. For the UAE Ministry of Sports, Stache DXB Media delivered high-impact video content built to inspire and inform.',
+        'From covering the Minister’s keynote at the World Sports Summit to producing the Elite Sports brand video “Numbers Don’t Lie,” our team delivered on time, to a high standard, and with work that resonated widely.',
+      ],
+    },
+    flow: {
+      heading: 'From the summit stage to the field',
+      intro: 'Two projects, both delivered with the energy UAE sport deserves.',
+      steps: [
+        ['The keynote brief', 'The Minister’s exact requirements, under serious time pressure.'],
+        ['Built from the ground up', 'A presentation designed for the World Sports Summit.'],
+        ['Summit coverage', 'The Minister’s speech covered on the day.'],
+        ['Premier facilities', 'The Elite Sports brand video, shot across the UAE.'],
+        ['Numbers Don’t Lie', 'A standout film that drew strong praise across the board.'],
+      ],
+    },
+    story: {
+      tag: { n: '2', w: ['Projects,', 'one', 'ministry'] },
+      formats: ['Video production', 'Event coverage', 'Presentation design', 'Campaign content'],
+      image: {
+        src: img('ministry-of-sports', 'story'),
+        alt: 'Frame from the Numbers Don’t Lie video: 22 international and domestic training camps',
+      },
+      client: 'UAE Ministry of Sports',
+      challenge:
+        'Build the Minister’s World Sports Summit presentation from the ground up, under serious time pressure and to exact requirements, and tell the story of UAE elite sport in a way that proves its impact.',
+      did: [
+        'Covered the Minister’s speech at the World Sports Summit',
+        'Built the accompanying presentation from the ground up',
+        'Produced and executed the Elite Sports brand video, shot across premier facilities in the UAE',
+      ],
+      result:
+        'A presentation delivered on time and to a high standard, contributing to a successful summit appearance, and a brand video that resonated widely and drew strong praise across the board.',
+    },
+    pillars: {
+      heading: ['Two projects,', 'one standard'],
+      intro: 'High-impact work for the UAE Ministry of Sports, built to inspire and inform.',
+      variant: 'two',
+      cards: [
+        [
+          'Minister’s keynote',
+          'Stache DXB Media was entrusted with covering the Minister’s speech at the World Sports Summit and building the accompanying presentation from the ground up. Despite the tight turnaround, it was delivered on time and to a high standard.',
+          'World Sports Summit',
+        ],
+        [
+          'Numbers Don’t Lie',
+          'For the Elite Sports sector under the Ministry of Sports, we produced a professional brand video shot across premier facilities in the UAE — a video that didn’t just promote the brand, but proved its impact.',
+          'Elite Sports',
+        ],
+      ],
+    },
+    band: {
+      line: 'Numbers don’t lie.',
+      small: 'A brand video that didn’t just promote Elite Sports, but proved its impact.',
+    },
+  },
+
+  talabat: {
+    slug: 'talabat',
+    title: 'Talabat Social Media Campaign Case Study | Food Delivery App Marketing UAE',
+    description:
+      'How Stache DXB Media took full ownership of Talabat’s digital presence — content strategy, community management, social video and a dedicated Ramadan marketing campaign in the UAE.',
+    sector: 'Lifestyle & F&B',
+    heading: 'Talabat social media campaign — food delivery app marketing UAE',
+    lines: ['Talabat', 'Social Media'],
+    facts: [
+      ['Client', 'Talabat, UAE'],
+      ['Scope', 'Content Strategy, Social Video Production, Community Management, Ramadan Campaign'],
+      ['Delivered', 'Structured content calendars and standout social video content'],
+    ],
+    hero: {
+      src: img('talabat', 'hero'),
+      alt: 'Talabat delivery rider in branded orange helmet and jersey – Talabat social media campaign by Stache DXB Media',
+      pos: '50% 8%',
+      posMobile: '45% 20%',
+      title: ['clamp(3rem,8.86vw,12rem)', 'clamp(2rem,5.17vw,6.2rem)'],
+      titleMobile: ['16.86vw', '9.83vw'],
+    },
+    strip: {
+      variant: 'two',
+      items: [
+        { src: img('talabat', 'strip-1'), alt: 'Ramadan Combo order screen in the Talabat app over a Dubai street scene – Ramadan marketing campaign UAE', tagline: 'Ramadan' },
+        { src: img('talabat', 'strip-2'), alt: 'Hands ordering Chicken Kabsa on the Talabat app – food delivery advertising Dubai', tagline: 'Everyday hunger' },
+      ],
+    },
+    spread: {
+      name: 'Talabat',
+      client: 'Talabat, UAE',
+      body: [
+        'As Talabat’s social media partner, Stache DXB Media took full ownership of the brand’s digital presence for this Talabat social media campaign — from content strategy to day-to-day community management.',
+        'We built structured content calendars that kept the food delivery app marketing UAE-wide consistent and culturally relevant, including a dedicated Ramadan marketing campaign UAE, and produced standout social video content Dubai audiences responded to. Every touchpoint was managed with care to keep Talabat’s F&B brand content MENA sharp, responsive, and true to the brand — proof of what focused food delivery advertising Dubai can look like.',
+      ],
+    },
+    flow: {
+      heading: 'From strategy to every scroll',
+      intro: 'Full ownership of the brand’s digital presence, from the plan to the day-to-day.',
+      steps: [
+        ['Content strategy', 'Setting the direction for the brand’s digital presence.'],
+        ['Content calendars', 'Structured, consistent and culturally relevant.'],
+        ['Social video', 'Standout content that captured attention.'],
+        ['Ramadan campaign', 'A dedicated campaign for the season.'],
+        ['Community management', 'Every touchpoint handled with care, every day.'],
+      ],
+    },
+    story: {
+      tag: { n: '360°', w: ['Ownership', 'of the brand’s', 'digital presence'] },
+      formats: ['Content strategy', 'Social video', 'Community management', 'Ramadan campaign'],
+      bigword: { words: ['Fast', 'Fun', 'Sharp'] },
+      client: 'Talabat',
+      challenge: 'Keep Talabat’s voice sharp, responsive, and true to the brand across every platform, for a diverse audience across the region.',
+      did: [
+        'Took full ownership of the brand’s digital presence, from content strategy to day-to-day community management',
+        'Built structured content calendars, including a dedicated Ramadan campaign',
+        'Produced standout social video content that captured attention and drove engagement',
+      ],
+      result: 'Content that stayed consistent and culturally relevant across the region — proof of what focused food delivery advertising Dubai can look like.',
+    },
+    pillars: {
+      heading: ['Built for', 'every moment'],
+      intro: 'Social video content that resonated with a diverse regional audience.',
+      cards: [
+        ['Ramadan', 'A dedicated campaign, made for the season.'],
+        ['Everyday hunger', 'Content for the moments people reach for the app.'],
+        ['Every platform', 'One voice, sharp and responsive everywhere.'],
+      ],
+    },
+    band: {
+      line: 'Fast, fun, and culturally sharp.',
+      small: 'Social content for Talabat that kept the brand consistent and culturally relevant across the region.',
+    },
+  },
+
+  taqa: {
+    slug: 'taqa',
+    title: 'TAQA Brand Activation Case Study | Energy Sector Event Marketing UAE',
+    description:
+      'How Stache DXB Media provided full-scale event coverage, PR, production and social media content for a TAQA brand activation — energy sector event marketing in the UAE.',
+    sector: 'Energy & utilities',
+    heading: 'TAQA brand activation — energy sector event marketing UAE',
+    lines: ['TAQA', 'Activation'],
+    facts: [
+      ['Client', 'TAQA, UAE'],
+      ['Scope', 'Event Coverage, PR, Production, Social Media Content'],
+      ['Delivered', 'The brand’s presence managed across every touchpoint, from press to social'],
+    ],
+    hero: {
+      src: img('taqa', 'hero'),
+      alt: 'Panel discussion on the TAQA Distribution stage under blue stage lights – energy sector event marketing UAE by Stache DXB Media',
+      pos: '50% 40%',
+      posMobile: '50% 45%',
+      title: ['clamp(3rem,15.50vw,12rem)', 'clamp(2rem,6.20vw,6.2rem)'],
+      titleMobile: ['29.50vw', '11.80vw'],
+    },
+    strip: {
+      variant: 'one',
+      items: [
+        { src: img('taqa', 'strip-1'), alt: 'TAQA Distribution purple pavilion with the line Customer Centricity: Your Needs, Our Priority – TAQA brand activation', tagline: 'The activation' },
+      ],
+    },
+    spread: {
+      name: 'TAQA',
+      client: 'TAQA, UAE',
+      body: [
+        'Stache DXB Media provided full-scale event coverage, PR, production, and social media content creation for this TAQA brand activation — managing the brand’s presence across every touchpoint, from press to social.',
+        'As energy sector event marketing UAE, the work combined corporate event production Dubai standards with a power and utilities campaign UAE lens, reflecting the kind of government-linked enterprise branding UAE that ensures a cohesive, impactful showing.',
+      ],
+    },
+    flow: {
+      heading: 'From press to social',
+      intro: 'Every touchpoint of the brand’s presence, managed as one.',
+      steps: [
+        ['Production', 'Corporate event production, to Dubai standards.'],
+        ['Event coverage', 'Full-scale coverage of the activation.'],
+        ['PR', 'The brand’s story carried through the press.'],
+        ['Social content', 'Content created for every platform.'],
+        ['One presence', 'A cohesive, impactful showing.'],
+      ],
+    },
+    story: {
+      tag: { n: '4', w: ['Services,', 'every', 'touchpoint'] },
+      formats: ['Event coverage', 'PR', 'Production', 'Social content'],
+      bigword: { words: ['Press', 'to', 'Social'] },
+      client: 'TAQA',
+      challenge: 'Give TAQA a cohesive, impactful presence at its brand activation, across press, the event itself and social.',
+      did: [
+        'Provided full-scale event coverage and production',
+        'Handled PR for the activation',
+        'Created social media content and managed the brand’s presence across every touchpoint',
+      ],
+      result: 'A cohesive, impactful showing that combined corporate event production Dubai standards with a power and utilities campaign UAE lens.',
+    },
+    pillars: {
+      heading: ['Every', 'touchpoint'],
+      intro: 'Government-linked enterprise branding, carried consistently from the stage to the feed.',
+      cards: [
+        ['On stage', 'Production and coverage of every session.'],
+        ['In the press', 'PR that carried the brand beyond the event.'],
+        ['On social', 'Content created to extend the showing online.'],
+      ],
+    },
+    band: {
+      line: 'A cohesive, impactful showing.',
+      small: 'Event coverage, PR, production and social content for TAQA, managed as one presence.',
     },
   },
 };

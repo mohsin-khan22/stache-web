@@ -7,19 +7,25 @@ import { sx } from '../pseudo';
 import { FLIP_EASE } from '../_chrome/motion';
 
 // Nine covers supplied by the client, replacing the imagery the bundle shipped
-// with. Sizes tile the 12-column grid exactly: 8+4, 4+8, 8+4, then three 4s.
+// with, plus ADIO and Ministry of Sports, which use their case-study hero
+// pictures. Sizes tile the 12-column grid exactly: 8+4, 4+8, 8+4, three 4s,
+// then 4+8.
 //
-// Sector lines on all nine are confirmed by the client's work-page copy.
+// Sector lines on the first nine are confirmed by the client's work-page copy.
+// ADIO's and Ministry of Sports' were written from their case studies and are
+// not yet confirmed.
 const PROJECTS = [
   { title: 'Mercedes-Benz', sector: 'Social · Performance · Video', category: 'automotive', image: '/assets/images/mercedes-benz.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mercedes-Benz GLE at night on a Dubai highway', size: 'large', href: '/work/mercedes-benz' },
-  { title: 'Talabat', sector: 'Video · Social content', category: 'lifestyle', image: '/assets/images/talabat.jpg', fit: 'cover', pos: 'center 45%', alt: 'Talabat gaming campaign', size: 'small' },
+  { title: 'Talabat', sector: 'Video · Social content', category: 'lifestyle', image: '/assets/images/talabat.jpg', fit: 'cover', pos: 'center 45%', alt: 'Talabat gaming campaign', size: 'small', href: '/work/talabat' },
   { title: 'NSTI Festival', sector: 'Launch · Social · Performance', category: 'government', image: '/assets/images/nsti-festival.jpg', fit: 'cover', pos: 'center 45%', alt: 'NSTI Festival virtual reality experience', size: 'small', href: '/work/nsti' },
-  { title: 'Climate Change & Environment', sector: 'Immersive video · Localisation', category: 'government', image: '/assets/images/climate-mangroves.jpg', fit: 'cover', pos: 'center 50%', alt: 'Immersive mangrove projection for the Ministry of Climate Change and Environment', size: 'large' },
-  { title: 'TAQA', sector: 'Events · Brand activation', category: 'government', image: '/assets/images/taqa.jpg', fit: 'cover', pos: 'center 50%', alt: 'TAQA outdoor event stage', size: 'large' },
+  { title: 'Climate Change & Environment', sector: 'Immersive video · Localisation', category: 'government', image: '/assets/images/climate-mangroves.jpg', fit: 'cover', pos: 'center 50%', alt: 'Immersive mangrove projection for the Ministry of Climate Change and Environment', size: 'large', href: '/work/mangrove' },
+  { title: 'TAQA', sector: 'Events · Brand activation', category: 'government', image: '/assets/images/taqa.jpg', fit: 'cover', pos: 'center 50%', alt: 'TAQA outdoor event stage', size: 'large', href: '/work/taqa' },
   { title: 'Mitsubishi', sector: 'Automotive · Social', category: 'automotive', image: '/assets/images/mitsubishi.jpg', fit: 'cover', pos: 'center 55%', alt: 'Mitsubishi SUV on a Dubai overpass at dusk', size: 'small', href: '/work/mitsubishi' },
   { title: 'Bioderma', sector: 'Consumer health · Social', category: 'lifestyle', image: '/assets/images/bioderma.jpg', fit: 'cover', pos: 'center 40%', alt: 'Bioderma Photoderm sun care campaign', size: 'small', href: '/work/bioderma' },
   { title: 'Omnipod', sector: 'Healthcare · Lifestyle', category: 'lifestyle', image: '/assets/images/omnipod.jpg', fit: 'cover', pos: 'center 45%', alt: 'Omnipod family lifestyle campaign', size: 'small', href: '/work/omnipod' },
   { title: 'SEE Institute', sector: 'Events · Institutional', category: 'government', image: '/assets/images/see-institute.jpg', fit: 'cover', pos: 'center 45%', alt: 'SEE Institute conference auditorium', size: 'small', href: '/work/see-institute' },
+  { title: 'ADIO', sector: 'Production · Event coverage', category: 'government', image: '/assets/images/adio-hero.jpg', fit: 'cover', pos: 'center 55%', alt: 'Abu Dhabi-Brazil Partnership Summit stage with lit podium', size: 'small', href: '/work/adio' },
+  { title: 'Ministry of Sports', sector: 'Video · Event coverage', category: 'government', image: '/assets/images/ministry-of-sports-hero.jpg', fit: 'cover', pos: 'center 35%', alt: 'UAE cyclist training on a desert road at sunset', size: 'large', href: '/work/ministry-of-sports' },
 ];
 
 const FILTERS = [

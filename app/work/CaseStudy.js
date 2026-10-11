@@ -51,13 +51,22 @@ export default function CaseStudy({ study }) {
     const items = steps.querySelectorAll('li');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // [data-par] pictures drift against the scroll, each by its own factor,
-    // over-scaled so the drift never shows an edge.
+    // Everything scroll-driven runs off one listener and one frame:
+    // - the full-bleed hero picture sinks at a quarter of the scroll speed,
+    //   clamped where the hero has left the screen so a fast jump past that
+    //   point still lands on the same final offset;
+    // - [data-par] pictures drift against the scroll, each by its own factor,
+    //   over-scaled so the drift never shows an edge.
     let frame = 0;
+    const heroPar = reduce ? null : root.querySelector('.hf-par');
     const pars = reduce ? [] : Array.from(root.querySelectorAll('[data-par]'));
     const drift = () => {
       frame = 0;
       const vh = window.innerHeight;
+      if (heroPar) {
+        const y = Math.min(window.scrollY, vh * 1.2);
+        heroPar.style.transform = `translateY(${(y * 0.25).toFixed(1)}px)`;
+      }
       pars.forEach((p) => {
         const r = p.parentNode.getBoundingClientRect();
         if (r.bottom < 0 || r.top > vh) return;
@@ -68,7 +77,7 @@ export default function CaseStudy({ study }) {
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(drift);
     };
-    if (pars.length) {
+    if (heroPar || pars.length) {
       pars.forEach((p) => (p.style.transform = 'scale(1.14)'));
       window.addEventListener('scroll', onScroll, { passive: true });
       drift();
@@ -133,7 +142,7 @@ export default function CaseStudy({ study }) {
     };
   }, [study.slug]);
 
-  const { facts, ticker, strip, spread, flow, story, crew, pillars, band } = study;
+  const { hero, facts, strip, spread, flow, story, crew, pillars, band } = study;
   const bandWords = band.line.split(' ');
 
   return (
@@ -143,59 +152,55 @@ export default function CaseStudy({ study }) {
     >
       <section
         className="hero"
+        // the per-study crop and title sizes the export wrote as one-off rules
+        style={{
+          '--hf-pos': hero.pos,
+          '--hf-pos-m': hero.posMobile,
+          '--hf-l1': hero.title[0],
+          '--hf-l2': hero.title[1],
+          '--hf-l1-m': hero.titleMobile[0],
+          '--hf-l2-m': hero.titleMobile[1],
+        }}
         ref={(el) => {
           heroRef.current = el;
           addReveal(el);
         }}
       >
-        <div className="wrap grid">
-          <div>
-            <p className="sector">{study.sector}</p>
-            <h1>
-              <span className="sr">{study.heading}</span>
-              {study.lines.map((line, li) => (
-                <span key={line} className={`l${li + 1}`} aria-hidden="true">
-                  {line.split('').map((c, i) => (
-                    <span key={i} className="ch" style={{ transitionDelay: `${li * 0.25 + i * 0.06}s` }}>
-                      {c}
-                    </span>
-                  ))}
-                </span>
-              ))}
-            </h1>
-            <div className="facts">
-              <p className="full">
-                <b>CLIENT:</b> {facts.client}
-              </p>
-              <p>
-                <b>SCOPE:</b> {facts.scope}
-              </p>
-              <p>
-                <b>DELIVERED:</b> {facts.delivered}
-              </p>
-            </div>
+        <div className="hf-media">
+          <div className="hf-par">
+            {/* the page's largest paint, so it jumps the queue */}
+            <img src={hero.src} alt={hero.alt} fetchPriority="high" />
           </div>
-          <figure className="poster">
-            <Parallax factor={study.poster.parallax}>
-              <img src={study.poster.src} alt={study.poster.alt} />
-            </Parallax>
-          </figure>
         </div>
-      </section>
-
-      {ticker && (
-        <div className="ticker" aria-label={ticker.label}>
-          <div className="track">
-            {[false, true].map((dup) => (
-              <ul key={String(dup)} aria-hidden={dup || undefined}>
-                {ticker.items.map((t) => (
-                  <li key={t}>{t}</li>
+        <div className="hf-shade" aria-hidden="true" />
+        <div className="wrap hf-content">
+          <p className="sector">{study.sector}</p>
+          <h1>
+            <span className="sr">{study.heading}</span>
+            {study.lines.map((line, li) => (
+              <span key={line} className={`l${li + 1}`} aria-hidden="true">
+                {line.split('').map((c, i) => (
+                  <span key={i} className="ch" style={{ transitionDelay: `${li * 0.25 + i * 0.06}s` }}>
+                    {/* a lone space in an inline-block collapses to nothing */}
+                    {c === ' ' ? '\u00a0' : c}
+                  </span>
                 ))}
-              </ul>
+              </span>
+            ))}
+          </h1>
+          <div className="facts">
+            {facts.map(([label, text], i) => (
+              <p key={label} className={i === 0 ? 'full' : undefined}>
+                <b>{label.toUpperCase()}:</b> {text}
+              </p>
             ))}
           </div>
         </div>
-      )}
+        <div className="hf-cue" aria-hidden="true">
+          <span>Scroll</span>
+          <i />
+        </div>
+      </section>
 
       <div className={`strip${strip.variant ? ` ${strip.variant}` : ''}`}>
         {strip.items.map((s, i) => (
@@ -351,11 +356,12 @@ export default function CaseStudy({ study }) {
               </h2>
               <p className="rv d1">{pillars.intro}</p>
             </div>
-            <ul className="cards">
-              {pillars.cards.map(([title, body], i) => (
+            <ul className={`cards${pillars.variant ? ` ${pillars.variant}` : ''}`}>
+              {pillars.cards.map(([title, body, kicker], i) => (
                 <li key={title}>
                   <span className="n">{pad(i + 1)}</span>
                   <div>
+                    {kicker && <p className="q">{kicker}</p>}
                     <h3>{title}</h3>
                     <p>{body}</p>
                   </div>

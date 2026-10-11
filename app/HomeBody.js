@@ -177,6 +177,7 @@ const PROJECTS = [
     imgStyle: { objectPosition: '50% 50%', filter: 'saturate(1) contrast(1.03)' },
     sector: 'Sustainability',
     title: 'Climate Change & Environment',
+    href: '/work/mangrove',
   },
   {
     span: 8,
@@ -186,6 +187,7 @@ const PROJECTS = [
     imgStyle: { objectPosition: '50% 45%', filter: 'saturate(0.95) contrast(1.03) brightness(0.96)' },
     sector: 'Lifestyle & F&B',
     title: 'Talabat',
+    href: '/work/talabat',
   },
 ];
 

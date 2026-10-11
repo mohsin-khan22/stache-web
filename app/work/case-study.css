@@ -23,32 +23,48 @@
 .cs .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- hero ---------- */
-/* top padding clears the fixed site header (~110px) on top of the export's 3.5rem */
-.cs .hero{background:var(--black);padding:calc(3.5rem + 110px) 0 4.5rem;overflow:hidden}
-.cs .hero .grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}
+/* Full-bleed: the picture fills the right of the screen behind the title, a
+   gradient carries it into the black on the left. Each study sets its own
+   picture crop and title sizes as custom properties on the section (see
+   CaseStudy): --hf-pos / --hf-pos-m, --hf-l1 / --hf-l2, --hf-l1-m / --hf-l2-m.
+   The site header is fixed over the top of the picture, so the hero takes the
+   full viewport and its top padding clears the header (~110px) instead of the
+   export's calc(100svh - 87px) below a sticky one. */
+.cs .hero{position:relative;padding:110px 0 0;min-height:100vh;min-height:100svh;display:flex;align-items:center;overflow:hidden;background:var(--black)}
 .cs .hero .sector{font-family:var(--display);font-weight:500;font-size:clamp(1.4rem,2.4vw,2rem);text-transform:uppercase;color:var(--bone);line-height:1;margin-bottom:1.2rem}
 .cs .hero h1{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.82;letter-spacing:-.01em}
-.cs .hero h1 .l1{display:block;color:var(--red);font-size:clamp(7rem,21vw,17rem)}
-.cs .hero h1 .l2{display:block;color:var(--cream);font-size:clamp(3.4rem,10vw,8.2rem)}
+.cs .hero h1 .l1{display:block;color:var(--red);font-size:var(--hf-l1);white-space:nowrap}
+.cs .hero h1 .l2{display:block;color:var(--cream);font-size:var(--hf-l2);white-space:nowrap}
 .cs .hero h1 .ch{display:inline-block}
-.cs .hero .facts{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem 2.5rem;margin-top:2.5rem;max-width:40rem}
+.cs .hero .facts{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem 2.5rem;margin-top:2.5rem;max-width:36rem}
 .cs .hero .facts p{font-size:1rem}
 .cs .hero .facts b{font-weight:700;display:block;font-family:var(--body);font-size:.95rem}
 .cs .hero .facts .full{grid-column:1/-1}
-.cs .poster{position:relative}
-.cs .poster img{width:100%;aspect-ratio:900/1267;object-fit:cover}
-.cs .poster::after{content:"";position:absolute;inset:0;background:var(--red);transform-origin:top;transform:scaleY(0)}
-@media(max-width:900px){.cs .hero .grid{grid-template-columns:1fr}.cs .poster{max-width:420px}}
 @media(max-width:520px){.cs .hero .facts{grid-template-columns:1fr}}
-
-/* ---------- ticker ---------- */
-.cs .ticker{background:var(--red);overflow:hidden;border-block:3px solid var(--black)}
-.cs .ticker .track{display:flex;width:max-content;animation:cs-tick 38s linear infinite}
-.cs .ticker ul{display:flex;list-style:none}
-.cs .ticker li{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(1.6rem,3vw,2.6rem);color:var(--cream);padding:.7rem 0;white-space:nowrap;display:flex;align-items:center}
-.cs .ticker li::after{content:"";width:.9em;height:.32em;margin:0 1.1em;background:var(--black);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 64'%3E%3Cpath d='M100 22C92 6 74 2 60 10 46 18 38 34 22 34 14 34 9 28 12 20 4 26 2 40 10 50 20 62 40 64 60 56 76 50 88 42 100 34 112 42 124 50 140 56 160 64 180 62 190 50 198 40 196 26 188 20 191 28 186 34 178 34 162 34 154 18 140 10 126 2 108 6 100 22Z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 64'%3E%3Cpath d='M100 22C92 6 74 2 60 10 46 18 38 34 22 34 14 34 9 28 12 20 4 26 2 40 10 50 20 62 40 64 60 56 76 50 88 42 100 34 112 42 124 50 140 56 160 64 180 62 190 50 198 40 196 26 188 20 191 28 186 34 178 34 162 34 154 18 140 10 126 2 108 6 100 22Z'/%3E%3C/svg%3E") center/contain no-repeat}
-.cs .ticker:hover .track{animation-play-state:paused}
-@keyframes cs-tick{to{transform:translateX(-50%)}}
+.cs .hf-media{position:absolute;top:0;bottom:0;right:0;left:34%;overflow:hidden}
+.cs .hf-par{position:absolute;inset:-6% 0;will-change:transform}
+.cs .hf-media img{width:100%;height:100%;object-fit:cover;object-position:var(--hf-pos)}
+.cs .hf-shade{position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(90deg,#000 0%,#000 34%,rgba(0,0,0,.75) 40%,rgba(0,0,0,.25) 52%,rgba(0,0,0,0) 64%),
+  linear-gradient(0deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 30%)}
+.cs .hf-content{position:relative;z-index:2;padding:5rem 0}
+.cs .hf-content>*{max-width:min(40rem,46vw)}
+.cs .hf-cue{position:absolute;z-index:2;right:clamp(1.25rem,3vw,2.5rem);bottom:2rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.2em;font-size:.8rem;color:var(--cream)}
+.cs .hf-cue span{writing-mode:vertical-rl}
+.cs .hf-cue i{display:block;width:2px;height:56px;background:rgba(243,236,226,.3);position:relative;overflow:hidden}
+.cs .hf-cue i::after{content:"";position:absolute;left:0;top:0;width:100%;height:40%;background:var(--red)}
+@media(max-width:900px){
+  .cs .hero{display:block;min-height:0;padding:0}
+  .cs .hf-media{left:0;bottom:auto;height:62vh;height:62svh}
+  .cs .hf-media img{object-position:var(--hf-pos-m)}
+  .cs .hf-shade{bottom:auto;height:62vh;height:62svh;background:linear-gradient(0deg,#000 0%,rgba(0,0,0,.4) 30%,rgba(0,0,0,0) 60%)}
+  .cs .hf-content{padding:calc(62vh - 3rem) 0 3.5rem;padding:calc(62svh - 3rem) 0 3.5rem}
+  .cs .hf-content>*{max-width:none}
+  .cs .hero h1 .l1{font-size:var(--hf-l1-m)}
+  .cs .hero h1 .l2{font-size:var(--hf-l2-m)}
+  .cs .hf-cue{display:none}
+}
+@keyframes cs-cue{0%{transform:translateY(-100%)}100%{transform:translateY(250%)}}
 
 /* ---------- work spread ---------- */
 .cs .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--cream)}
@@ -146,21 +162,22 @@
 @media(max-width:700px){.cs .contacts{grid-template-columns:1fr;gap:1.5rem}.cs .contacts div{border-left:0;padding:0}}
 
 /* ---------- variants used by the later exports ---------- */
-/* SEE Institute, Mercedes-Benz, Bioderma and Mitsubishi share the base above
-   and add these: a two- or three-up strip with taglines, a parallax wrapper,
-   format pills and a big-word panel in the story, image pairs, pillar cards. */
+/* One-, two- or three-up strips with taglines, a parallax wrapper, format
+   pills and a big-word panel in the story, image pairs, pillar cards. */
 .cs .par{will-change:transform;height:100%}
-.cs .poster{overflow:hidden}
 
 .cs .strip.two{grid-template-columns:1fr 1fr}
 .cs .strip.two img{aspect-ratio:11/8}
 .cs .strip.three{grid-template-columns:repeat(3,1fr)}
 .cs .strip.three img{aspect-ratio:1/1}
+.cs .strip.one{grid-template-columns:1fr}
+.cs .strip.one img{aspect-ratio:1800/820}
 @media(max-width:700px){
   .cs .strip.two,.cs .strip.three{grid-template-columns:1fr}
   .cs .strip.two figure:first-child,.cs .strip.three figure:first-child{grid-column:auto}
   .cs .strip.two figure:first-child img{aspect-ratio:11/8}
   .cs .strip.three figure:first-child img{aspect-ratio:1/1}
+  .cs .strip.one img{aspect-ratio:4/3}
 }
 .cs .strip figure .tagline{position:absolute;left:1rem;bottom:1rem;font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.1rem;letter-spacing:.03em;color:var(--cream);background:var(--red);padding:.2rem .7rem}
 
@@ -197,29 +214,13 @@
 .cs .cards h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(1.8rem,2.7vw,3rem);overflow-wrap:break-word;line-height:.9;margin-bottom:.6rem}
 .cs .cards p{font-size:1.02rem;max-width:30ch}
 @media(max-width:860px){.cs .pillars .head,.cs .cards{grid-template-columns:1fr}.cs .cards li{min-height:0}}
-
-/* ---------- per-study overrides ---------- */
-/* Every study after NSTI has a 4:5 poster and a one-line title sized to its own words */
-.cs--omnipod .poster img,.cs--see-institute .poster img,.cs--mercedes-benz .poster img,.cs--bioderma .poster img,.cs--mitsubishi .poster img{aspect-ratio:4/5}
-.cs--omnipod .hero h1 span,.cs--see-institute .hero h1 span,.cs--mercedes-benz .hero h1 span,.cs--bioderma .hero h1 span,.cs--mitsubishi .hero h1 span{white-space:nowrap}
-.cs--omnipod .hero h1 .l1{font-size:clamp(4rem,9.5vw,9.5rem)}
-.cs--omnipod .hero h1 .l2{font-size:clamp(3rem,7vw,6.4rem)}
-.cs--see-institute .hero h1 .l1{font-size:clamp(7rem,19vw,16rem)}
-.cs--see-institute .hero h1 .l2{font-size:clamp(3rem,7.4vw,6.8rem)}
-.cs--mercedes-benz .hero h1 .l1{font-size:clamp(4rem,9.5vw,9.5rem)}
-.cs--mercedes-benz .hero h1 .l2{font-size:clamp(2.2rem,5.2vw,5rem)}
-.cs--bioderma .hero h1 .l1{font-size:clamp(4rem,9.5vw,9.5rem)}
-.cs--bioderma .hero h1 .l2{font-size:clamp(3rem,7vw,6.4rem)}
-.cs--mitsubishi .hero h1 .l1{font-size:clamp(3.4rem,6.6vw,6.6rem)}
-.cs--mitsubishi .hero h1 .l2{font-size:clamp(3rem,7vw,6.4rem)}
-@media(max-width:900px){
-  .cs--omnipod .hero h1 .l1{font-size:min(15vw,10rem)}.cs--omnipod .hero h1 .l2{font-size:min(12vw,6rem)}
-  .cs--see-institute .hero h1 .l1{font-size:min(30vw,14rem)}.cs--see-institute .hero h1 .l2{font-size:min(14vw,6rem)}
-  .cs--mercedes-benz .hero h1 .l1{font-size:min(16vw,9rem)}.cs--mercedes-benz .hero h1 .l2{font-size:min(8.2vw,5rem)}
-  .cs--bioderma .hero h1 .l1{font-size:min(16vw,9rem)}.cs--bioderma .hero h1 .l2{font-size:min(14vw,6rem)}
-  .cs--mitsubishi .hero h1 .l1{font-size:min(10.5vw,6rem)}.cs--mitsubishi .hero h1 .l2{font-size:min(14vw,6rem)}
-}
-.cs--bioderma .cards h3{font-size:clamp(2.2rem,3.4vw,3rem);overflow-wrap:normal}
+/* two long cards with a kicker above the title (Ministry of Sports) */
+.cs .cards.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cs .cards.two li{min-height:340px}
+.cs .cards.two li:nth-child(2){background:var(--ink);color:var(--cream)}
+.cs .cards .q{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1rem;letter-spacing:.04em;opacity:.85;margin-bottom:.5rem}
+.cs .cards.two p{max-width:46ch}
+@media(max-width:860px){.cs .cards.two{grid-template-columns:1fr}}
 
 /* ================= ANIMATION STATES (only without reduced motion) ================= */
 /* The hero waits on the shell's reveal gate, which sets [data-revealed] once the
@@ -232,10 +233,13 @@
   .cs .hero[data-revealed] .sector{opacity:1;transform:none}
   .cs .hero[data-revealed] .facts>*{opacity:1;transform:none}
   .cs .hero[data-revealed] .facts>*:nth-child(1){transition-delay:.9s}.cs .hero[data-revealed] .facts>*:nth-child(2){transition-delay:1s}.cs .hero[data-revealed] .facts>*:nth-child(3){transition-delay:1.1s}
-  .cs .poster::after{transform:scaleY(1);transition:transform 1.1s var(--ease) .35s}
-  .cs .poster img{transform:scale(1.15);transition:transform 1.6s var(--ease) .35s}
-  .cs .hero[data-revealed] .poster::after{transform:scaleY(0)}
-  .cs .hero[data-revealed] .poster img{transform:none}
+  .cs .hf-media{opacity:0;transform:scale(1.18);transition:opacity 1.4s var(--ease),transform 2.6s var(--ease)}
+  .cs .hero[data-revealed] .hf-media{opacity:1;transform:none}
+  .cs .hf-shade{opacity:0;transition:opacity 1.2s var(--ease) .2s}
+  .cs .hero[data-revealed] .hf-shade{opacity:1}
+  .cs .hf-cue i::after{animation:cs-cue 1.8s var(--ease) infinite}
+  .cs .hf-cue{opacity:0;transition:opacity .8s var(--ease) 1.6s}
+  .cs .hero[data-revealed] .hf-cue{opacity:1}
 
   .cs .rv{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
   .cs .rv.in{opacity:1;transform:none}
@@ -269,8 +273,6 @@
   .cs .cards.in li .n{transform:none;opacity:1}
 }
 @media (prefers-reduced-motion:reduce){
-  .cs .ticker .track{animation:none;flex-wrap:wrap}
-  .cs .ticker ul[aria-hidden]{display:none}
   .cs .steps::after{transform:none!important}
   .cs .steps li::before{background:var(--red);border-color:var(--red)}
 }
